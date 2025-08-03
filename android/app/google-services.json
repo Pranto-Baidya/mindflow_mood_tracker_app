@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "204103598391",
+    "project_id": "mindflow-e7840",
+    "storage_bucket": "mindflow-e7840.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:204103598391:android:0e2dd534e8d3eb350d9ab2",
+        "android_client_info": {
+          "package_name": "com.example.mindflow_mood_tracker_app_with_firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "204103598391-dakntmkcb2cpqcus08pvh2aicm42must.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mindflow_mood_tracker_app_with_firebase",
+            "certificate_hash": "19c68ad3f4a1f31fece65b8de550cf4e9fd26d28"
+          }
+        },
+        {
+          "client_id": "204103598391-2gnj02aqb6336bagdrvsqu65enuhhbda.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQGCwZmKKCrZUyWm3I4YzvLrTeF6EYJXc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "204103598391-2gnj02aqb6336bagdrvsqu65enuhhbda.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "204103598391-2ld9e8gb156svr91vdtbvvr4559jodph.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.mindflowMoodTrackerAppWithFirebase"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
