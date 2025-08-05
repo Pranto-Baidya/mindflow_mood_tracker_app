@@ -62,4 +62,10 @@ class _AnimatedMoodContainerWidgetState extends State<AnimatedMoodContainerWidge
       );
     }
   }
+
+  @override
+  void dispose() {
+    _controller?.dispose();
+    super.dispose();
+  }
 }

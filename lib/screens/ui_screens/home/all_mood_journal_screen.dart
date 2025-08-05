@@ -9,19 +9,22 @@ import 'package:lottie/lottie.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/provider/auth_provider/auth_provider.dart' show AuthProvider;
 import 'package:mindflow_mood_tracker_app_with_firebase/provider/data_provider/data_provider.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/provider/internet_connection_provider/internet_provider.dart';
+import 'package:mindflow_mood_tracker_app_with_firebase/provider/preferences_provider/preferences_provider.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/provider/theme_provider/theme_provider.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/screens/auth_screens/sign_in_sign_up/sign_in_sign_up.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/screens/ui_screens/add_journal/add_journal.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/screens/ui_screens/edit_journal/edit_journal.dart';
-import 'package:mindflow_mood_tracker_app_with_firebase/screens/ui_screens/mood_stats_screen/pie_chart_screen.dart';
+import 'package:mindflow_mood_tracker_app_with_firebase/screens/ui_screens/mood_stats_screen/mood_chart_screen.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/screens/ui_screens/profile_screen/profile.dart';
-import 'package:mindflow_mood_tracker_app_with_firebase/test.dart';
+import 'package:mindflow_mood_tracker_app_with_firebase/screens/ui_screens/search_history/search_history.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/widgets/animated_container/animated_container_widget.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/widgets/app_loader/app_loader.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/widgets/app_toastMsg/app_toastMsg.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/widgets/custom_listile/custom_listTile.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../../local_notification/notification_service.dart';
 
 class AllMoodJournals extends StatefulWidget {
   const AllMoodJournals({super.key});
@@ -188,6 +191,44 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
     );
   }
 
+  void exitAppDialogue(BuildContext context){
+    var theme = Theme.of(context);
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text("Wait!",style: theme.textTheme.titleLarge,),
+        content: Text(
+          "Are you sure you want to exit from the app?",
+          style: theme.textTheme.titleMedium,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () =>
+                Navigator.pop(context, false),
+            child: Text(
+              "Cancel",
+              style: theme.textTheme.titleSmall
+                  ?.copyWith(
+                color: theme
+                    .colorScheme
+                    .primary,
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () =>
+                SystemNavigator.pop(),
+            child: Text(
+              "Yes",
+              style: theme.textTheme.titleSmall
+                  ?.copyWith(color: Colors.red),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Color _getBackgroundColor(String mood) {
     switch (mood) {
       case 'Very happy':
@@ -243,11 +284,12 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
                   hintText: 'Find a mood journal',
                   hintStyle: theme.textTheme.titleSmall?.copyWith(color: Colors.grey),
                 ),
-                onChanged: (value)async{
+                onSubmitted: (value)async{
                   await context.read<DataProvider>().searchContents(value);
                   setState(() {
                     hasSearched = true;
                   });
+                  context.read<PreferencesProvider>().saveSearchedHistory(value);
                 },
               ),
             )
@@ -382,7 +424,7 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
                 ),
               ],
             ),
-           isFiltering? SizedBox(height: 10.h) : SizedBox(),
+            isFiltering? SizedBox(height: 10.h) : SizedBox(),
             if (isFiltering)
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -440,6 +482,7 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
                             ),
                           )
                               : ListView.builder(
+                            physics: BouncingScrollPhysics(),
                             itemCount: journalList.length,
                             itemBuilder: (context, index) {
                               final result = journalList[index];
@@ -539,46 +582,37 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
                                   child: AnimatedMoodContainerWidget(
                                     index: index,
                                     offset: Offset(0, 0.2),
-                                    child: ExpansionTile(
-                                      backgroundColor: theme.cardColor,
-                                      tilePadding: EdgeInsets.all(20),
-                                      collapsedBackgroundColor: theme.cardColor,
-                                      collapsedIconColor: theme.iconTheme.color,
-                                      iconColor: theme.iconTheme.color,
-                                      collapsedShape: RoundedRectangleBorder(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: _getBackgroundColor(result.mood).withOpacity(0.15),
                                         borderRadius: BorderRadius.circular(15.r),
                                       ),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(15.r),
-                                      ),
-                                      leading: CircleAvatar(
-                                        backgroundColor: _getBackgroundColor(
-                                          result.mood,
-                                        ),
-                                        child: Icon(_moodIcon(result.mood)),
-                                      ),
-                                      title: Text(
-                                        result.content,
-                                        style: theme.textTheme.titleMedium,
-                                      ),
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.only(
-                                            left: 20.w,
-                                            right: 15.w,
-                                            bottom: 10.h,
+                                      child: ListTile(
+                                        tileColor: Colors.transparent,
+                                        contentPadding: EdgeInsets.all(20),
+                                        leading: CircleAvatar(
+                                          backgroundColor: _getBackgroundColor(
+                                            result.mood,
                                           ),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                'Date :    ${DateFormat('d/M/y').format(result.date)}, ${result.time.format(context)}',
-                                                style:
-                                                theme.textTheme.titleMedium,
-                                              ),
-                                              SizedBox(height: 10.h),
-                                              Row(
+                                          child: Icon(_moodIcon(result.mood)),
+                                        ),
+                                        title: Text(
+                                          result.content,
+                                          style: theme.textTheme.titleMedium?.copyWith(fontSize: 18.sp),
+                                        ),
+                                        subtitle: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(height: 20.h,),
+                                            Text(
+                                              'Date :    ${DateFormat('d/M/y').format(result.date)}, ${result.time.format(context)}',
+                                              style:
+                                              theme.textTheme.titleMedium,
+                                            ),
+                                            SizedBox(height: 10.h),
+                                            SingleChildScrollView(
+                                              scrollDirection: Axis.horizontal,
+                                              child: Row(
                                                 children: [
                                                   Text(
                                                     'Tags :  ',
@@ -598,11 +632,11 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
                                                   })
                                                 ],
                                               ),
-                                            ],
-                                          ),
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    )
                                   ),
                                 ),
                               );
@@ -674,7 +708,7 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
                     leadingIcon: Icons.history,
                     title: 'History',
                     onTap:(){
-
+                       Navigator.push(context, MaterialPageRoute(builder: (context)=>SearchHistory()));
                     }
                 )
             ),
@@ -707,7 +741,7 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
                     leadingIcon: Icons.power_settings_new_outlined,
                     title: 'Exit app',
                     onTap:(){
-
+                      exitAppDialogue(context);
                     }
                 )
             ),

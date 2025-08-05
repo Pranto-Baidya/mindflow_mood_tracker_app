@@ -42,6 +42,7 @@ class NotificationService{
         uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.wallClockTime,
     );
   }
+
   static tz.TZDateTime _nextInstanceOfTime(int hour, int minute){
     final now = tz.TZDateTime.now(tz.local);
     var scheduled = tz.TZDateTime(tz.local, now.year,now.month,now.day,hour,minute);

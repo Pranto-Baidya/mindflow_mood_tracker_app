@@ -299,25 +299,33 @@ class _AddJournalState extends State<AddJournal> {
                       bool isSelected = selectedTags.contains(tag);
                       return Padding(
                         padding: EdgeInsets.symmetric(horizontal: 5.w),
-                        child: ChoiceChip(
-                          label: Text(tag,style: theme.textTheme.titleMedium?.copyWith(color: isSelected?Colors.white: theme.colorScheme.primary),),
-                          selected: isSelected,
-                          side: BorderSide(color: theme.colorScheme.primary),
-                          backgroundColor: theme.colorScheme.primary.withOpacity(0.2),
-                          selectedColor: theme.colorScheme.primary,
-                          checkmarkColor: Colors.white,
-                          onSelected: (selected){
-                            if(selected){
-                              setState(() {
-                                selectedTags.add(tag);
-                              });
-                            }
-                            else{
-                              setState(() {
-                                selectedTags.remove(tag);
-                              });
+                        child: GestureDetector(
+                          onLongPress: ()async{
+                            if(prefs.customTags.contains(tag)){
+                              context.watch<PreferencesProvider>().removeCustomTag(tag);
+                              await prefs.saveCustomTag(prefs.customTags);
                             }
                           },
+                          child: ChoiceChip(
+                            label: Text(tag,style: theme.textTheme.titleMedium?.copyWith(color: isSelected?Colors.white: theme.colorScheme.primary),),
+                            selected: isSelected,
+                            side: BorderSide(color: theme.colorScheme.primary),
+                            backgroundColor: theme.colorScheme.primary.withOpacity(0.2),
+                            selectedColor: theme.colorScheme.primary,
+                            checkmarkColor: Colors.white,
+                            onSelected: (selected){
+                              if(selected){
+                                setState(() {
+                                  selectedTags.add(tag);
+                                });
+                              }
+                              else{
+                                setState(() {
+                                  selectedTags.remove(tag);
+                                });
+                              }
+                            },
+                          ),
                         ),
                       );
                     }),

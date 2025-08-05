@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/provider/auth_provider/auth_provider.dart' show AuthProvider;
 import 'package:mindflow_mood_tracker_app_with_firebase/widgets/app_colors/app_colors.dart';
+import 'package:mindflow_mood_tracker_app_with_firebase/widgets/app_loader/app_loader.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/widgets/app_toastMsg/app_toastMsg.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/widgets/status_bar_color/status%20bar%20color.dart';
 import 'package:provider/provider.dart';
@@ -100,7 +101,7 @@ class _PasswordResetState extends State<PasswordReset> {
                       minimumSize: Size(double.infinity.w, 50.h),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.r))
                     ),
-                    child: Text('Send link',style: theme.textTheme.titleLarge?.copyWith(color: Colors.white,fontWeight: FontWeight.w500),)
+                    child: context.watch<AuthProvider>().isLoading?AppLoader.lightThemeLoader():Text('Send link',style: theme.textTheme.titleLarge?.copyWith(color: Colors.white,fontWeight: FontWeight.w500),)
                 ): ElevatedButton(
                     onPressed: null,
                     style: ElevatedButton.styleFrom(
