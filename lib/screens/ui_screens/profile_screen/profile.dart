@@ -384,6 +384,7 @@ class _ProfileState extends State<Profile> {
         ),
       ),
       body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         child: Column(
           children: [
             SizedBox(height: 20.h),
@@ -392,24 +393,14 @@ class _ProfileState extends State<Profile> {
               radius: 50.r,
               backgroundImage: NetworkImage(user?.photoURL ?? ''),
             )
-                : Stack(
-              children: [
+                :
                 CircleAvatar(
                   radius: 50.r,
                   backgroundColor: theme.colorScheme.primary.withOpacity(0.2),
                   child: Icon(Icons.person, color: theme.colorScheme.primary, size: 60),
                 ),
-                Positioned(
-                  top: 70,
-                  left: 60,
-                  bottom: 10,
-                  child: IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.camera_alt, color: theme.colorScheme.primary),
-                  ),
-                ),
-              ],
-            ),
+
+
             SizedBox(height: 20.h),
             Text(
               user?.displayName ?? '',

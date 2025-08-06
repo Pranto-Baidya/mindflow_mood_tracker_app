@@ -24,8 +24,6 @@ import 'package:mindflow_mood_tracker_app_with_firebase/widgets/custom_listile/c
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../local_notification/notification_service.dart';
-
 class AllMoodJournals extends StatefulWidget {
   const AllMoodJournals({super.key});
 

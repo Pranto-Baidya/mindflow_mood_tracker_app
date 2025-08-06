@@ -44,6 +44,7 @@ class _SearchHistoryState extends State<SearchHistory> {
           TextButton(
             onPressed: ()async{
               await context.read<PreferencesProvider>().clearAllHistory();
+              Navigator.pop(context);
             },
             child: Text(
               "Yes",
@@ -65,16 +66,18 @@ class _SearchHistoryState extends State<SearchHistory> {
         title: Text('Search history', style: theme.textTheme.headlineMedium),
         iconTheme: theme.iconTheme,
         backgroundColor: Colors.transparent,
+
         systemOverlayStyle: SystemUiOverlayStyle(
           statusBarBrightness: isDark ? Brightness.light : Brightness.light,
         ),
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 20.w),
-            child: IconButton(
+            child: context.read<PreferencesProvider>().historyList.isEmpty?
+            Icon(Icons.delete_forever,color: Colors.red,size: 30.sp,)
+            :IconButton(
                 onPressed: (){
                  clearAllHistoryDialogue(context);
-                 Navigator.pop(context);
                 },
                 icon: Icon(Icons.delete_forever,color: Colors.red,size: 30.sp,)
             ),

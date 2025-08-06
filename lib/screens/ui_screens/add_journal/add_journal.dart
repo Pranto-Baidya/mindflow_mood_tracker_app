@@ -41,6 +41,9 @@ class _AddJournalState extends State<AddJournal> {
 
   DateTime selectedDate = DateTime.now();
 
+  String? _tagToDelete;
+
+
   DateTime get combinedDateTime{
     return DateTime(
         selectedDate.year,
@@ -219,6 +222,7 @@ class _AddJournalState extends State<AddJournal> {
           child: Padding(
             padding:  EdgeInsets.symmetric(horizontal: 20.w),
             child: ListView(
+              physics: BouncingScrollPhysics(),
               children: [
                 SizedBox(height: 20.h,),
                 Container(
@@ -247,7 +251,7 @@ class _AddJournalState extends State<AddJournal> {
                 SizedBox(height: 16.h,),
                 Container(
                   width: double.infinity.w,
-                  height: 155.h,
+                  height: 160.h,
                   decoration: BoxDecoration(
                       color: theme.cardColor,
                       borderRadius: BorderRadius.circular(15.r)
@@ -297,37 +301,61 @@ class _AddJournalState extends State<AddJournal> {
 
                     ...allTags.map((tag){
                       bool isSelected = selectedTags.contains(tag);
+                      bool isCustomTag = prefs.customTags.contains(tag);
                       return Padding(
                         padding: EdgeInsets.symmetric(horizontal: 5.w),
-                        child: GestureDetector(
-                          onLongPress: ()async{
-                            if(prefs.customTags.contains(tag)){
-                              context.watch<PreferencesProvider>().removeCustomTag(tag);
-                              await prefs.saveCustomTag(prefs.customTags);
-                            }
-                          },
-                          child: ChoiceChip(
-                            label: Text(tag,style: theme.textTheme.titleMedium?.copyWith(color: isSelected?Colors.white: theme.colorScheme.primary),),
-                            selected: isSelected,
-                            side: BorderSide(color: theme.colorScheme.primary),
-                            backgroundColor: theme.colorScheme.primary.withOpacity(0.2),
-                            selectedColor: theme.colorScheme.primary,
-                            checkmarkColor: Colors.white,
-                            onSelected: (selected){
-                              if(selected){
-                                setState(() {
-                                  selectedTags.add(tag);
-                                });
-                              }
-                              else{
-                                setState(() {
-                                  selectedTags.remove(tag);
-                                });
-                              }
-                            },
-                          ),
+                        child: Stack(
+                          children: [
+                            GestureDetector(
+                              onLongPress : (){
+                                if(isCustomTag) {
+                                  setState(() {
+                                    _tagToDelete = tag;
+                                  });
+                                }
+                             },
+                              child: ChoiceChip(
+                                label: Text(tag,
+                                    style: theme.textTheme.titleMedium?.copyWith(
+                                        color: isSelected ? Colors.white : theme.colorScheme.primary)),
+                                selected: isSelected,
+                                side: BorderSide(color: theme.colorScheme.primary),
+                                backgroundColor: theme.colorScheme.primary.withOpacity(0.2),
+                                selectedColor: theme.colorScheme.primary,
+                                checkmarkColor: Colors.white,
+                                onSelected: (selected) {
+                                  setState(() {
+                                    if (selected) {
+                                      selectedTags.add(tag);
+                                    } else {
+                                      selectedTags.remove(tag);
+                                    }
+                                  });
+                                },
+                              ),
+                            ),
+                            if (_tagToDelete == tag && isCustomTag)
+                              Positioned(
+                                right: 0,
+                                top: -1.7,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    if (prefs.customTags.contains(tag)) {
+                                      context.read<PreferencesProvider>().removeCustomTag(tag);
+                                      prefs.saveCustomTag(prefs.customTags);
+                                    }
+                                    setState(() {
+                                      selectedTags.remove(tag);
+                                      _tagToDelete = null;
+                                    });
+                                  },
+                                  child: Icon(Icons.cancel, color: Colors.red, size: 20),
+                                ),
+                              ),
+                          ],
                         ),
                       );
+
                     }),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 5.w,vertical: 6),

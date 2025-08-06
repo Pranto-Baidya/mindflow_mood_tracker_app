@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/firebase_options.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/provider/auth_provider/auth_provider.dart';
@@ -13,19 +15,22 @@ import 'package:mindflow_mood_tracker_app_with_firebase/provider/theme_provider/
 import 'package:mindflow_mood_tracker_app_with_firebase/screens/auth_screens/check_user/check_user.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/screens/ui_screens/home/all_mood_journal_screen.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/screens/ui_screens/splash_screen/splash_screen.dart';
+import 'package:mindflow_mood_tracker_app_with_firebase/test.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/theme_data.dart';
 import 'package:provider/provider.dart';
+import 'package:timezone/data/latest.dart' as tz;
 
-import 'local_notification/notification_service.dart';
+
+
 
 void main()async{
   WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService.init();
+  await NotificationService.requestPermissions();
+  await NotificationService.scheduleDailyReminder();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform
   );
-  await NotificationService.init();
-  await NotificationService.requestPermission();
-  await NotificationService.scheduleDailyReminder();
   runApp(
      MultiProvider(
          providers: [

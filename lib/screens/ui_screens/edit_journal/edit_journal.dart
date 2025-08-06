@@ -196,6 +196,7 @@ class _EditJournalState extends State<EditJournal> {
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 20.w,),
           child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
