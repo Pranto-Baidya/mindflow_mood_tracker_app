@@ -1,6 +1,3 @@
-
-
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,6 +9,7 @@ import 'package:mindflow_mood_tracker_app_with_firebase/provider/preferences_pro
 import 'package:mindflow_mood_tracker_app_with_firebase/widgets/app_loader/app_loader.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/widgets/app_toastMsg/app_toastMsg.dart';
 import 'package:provider/provider.dart';
+import '../../../l10n/app_localizations.dart';
 import '../../../provider/theme_provider/theme_provider.dart';
 
 class AddJournal extends StatefulWidget {
@@ -42,7 +40,6 @@ class _AddJournalState extends State<AddJournal> {
   DateTime selectedDate = DateTime.now();
 
   String? _tagToDelete;
-
 
   DateTime get combinedDateTime{
     return DateTime(
@@ -103,7 +100,7 @@ class _AddJournalState extends State<AddJournal> {
         builder: (BuildContext context){
           var theme = Theme.of(context);
           return AlertDialog(
-            title: Text('Add a new tag',style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500),),
+            title: Text(AppLocalizations.of(context)!.add_tag_title,style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500),),
             content: Form(
               key: _tagKey,
               child: Column(
@@ -113,13 +110,13 @@ class _AddJournalState extends State<AddJournal> {
                     controller: _tagsController,
                     validator: (value){
                       if(value==null || value.isEmpty){
-                        return "Please add a tag";
+                        return AppLocalizations.of(context)!.tag_empty_error;
                       }
                       return null;
                     },
                     cursorColor: theme.colorScheme.primary,
                     decoration: InputDecoration(
-                      hint: Text('Write the tag name you want to add',style: theme.textTheme.titleSmall?.copyWith(color :Colors.grey),)
+                        hint: Text(AppLocalizations.of(context)!.tag_hint,style: theme.textTheme.titleSmall?.copyWith(color :Colors.grey),)
                     ),
                   ),
                   SizedBox(height: 20.h,),
@@ -139,14 +136,14 @@ class _AddJournalState extends State<AddJournal> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: theme.colorScheme.primary,
-                          elevation: 0,
-                          minimumSize: Size(double.infinity.w, 50.h),
-                          shape: RoundedRectangleBorder(
+                        backgroundColor: theme.colorScheme.primary,
+                        elevation: 0,
+                        minimumSize: Size(double.infinity.w, 50.h),
+                        shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(30.r)
-                          ),
+                        ),
                       ),
-                      child: Text('Add tag',style: theme.textTheme.titleLarge?.copyWith(color: Colors.white, fontWeight: FontWeight.w500))
+                      child: Text(AppLocalizations.of(context)!.add_tag_button,style: theme.textTheme.titleLarge?.copyWith(color: Colors.white, fontWeight: FontWeight.w500))
                   ),
                 ],
               ),
@@ -210,7 +207,7 @@ class _AddJournalState extends State<AddJournal> {
     final allTags = {...defaultTags, ...prefs.customTags};
     return Scaffold(
         appBar: AppBar(
-          title : Text('Add a mood journal',style: theme.textTheme.headlineMedium,),
+          title : Text(AppLocalizations.of(context)!.add_mood_journal_title,style: theme.textTheme.headlineMedium,),
           backgroundColor: Colors.transparent,
           iconTheme: theme.iconTheme,
           systemOverlayStyle: SystemUiOverlayStyle(
@@ -227,7 +224,7 @@ class _AddJournalState extends State<AddJournal> {
                 SizedBox(height: 20.h,),
                 Container(
                   width: double.infinity.w,
-                  height: 100.h,
+                  height: 105.h,
                   decoration: BoxDecoration(
                       color: theme.cardColor,
                       borderRadius: BorderRadius.circular(15.r)
@@ -239,10 +236,10 @@ class _AddJournalState extends State<AddJournal> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         SizedBox(height: 20.h,),
-                        Text('Date : ${DateFormat('d/M/y, h:mm a').format(combinedDateTime)}',style: theme.textTheme.titleMedium,),
+                        Text('${AppLocalizations.of(context)!.date_label} : ${DateFormat('d/M/y, h:mm a').format(combinedDateTime)}',style: theme.textTheme.titleMedium,),
                         TextButton(
                             onPressed: pickDateAndTime,
-                            child: Text('Change date',style: theme.textTheme.titleMedium?.copyWith(color: theme.colorScheme.primary),)
+                            child: Text(AppLocalizations.of(context)!.change_date_button,style: theme.textTheme.titleMedium?.copyWith(color: theme.colorScheme.primary),)
                         ),
                       ],
                     ),
@@ -251,7 +248,7 @@ class _AddJournalState extends State<AddJournal> {
                 SizedBox(height: 16.h,),
                 Container(
                   width: double.infinity.w,
-                  height: 160.h,
+                  height: 162.h,
                   decoration: BoxDecoration(
                       color: theme.cardColor,
                       borderRadius: BorderRadius.circular(15.r)
@@ -259,7 +256,7 @@ class _AddJournalState extends State<AddJournal> {
                   child: Column(
                     children: [
                       SizedBox(height: 20.h,),
-                      Text('Select your mood',style: theme.textTheme.titleMedium,),
+                      Text(AppLocalizations.of(context)!.select_mood_label,style: theme.textTheme.titleMedium,),
                       SizedBox(height: 15.h,),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -281,104 +278,104 @@ class _AddJournalState extends State<AddJournal> {
                   maxLines: 5,
                   validator: (value){
                     if(value==null || value.isEmpty){
-                      return "Please write how you're feeling now";
+                      return AppLocalizations.of(context)!.content_empty_error;
                     }
                     return null;
                   },
                   decoration: InputDecoration(
                     hintFadeDuration: Duration(seconds: 5),
-                    hintText: 'Write about your mood',
+                    hintText: AppLocalizations.of(context)!.content_hint,
                     hintStyle: theme.textTheme.titleMedium?.copyWith(color: Colors.grey,fontWeight: FontWeight.w400),
 
                   ),
                 ),
                 SizedBox(height: 20.h,),
-                Text('Select Tags',style: theme.textTheme.titleMedium,),
+                Text(AppLocalizations.of(context)!.select_tags_label,style: theme.textTheme.titleMedium,),
                 SizedBox(height: 20.h,),
                 Wrap(
-                  alignment: WrapAlignment.start,
-                  children: [
+                    alignment: WrapAlignment.start,
+                    children: [
 
-                    ...allTags.map((tag){
-                      bool isSelected = selectedTags.contains(tag);
-                      bool isCustomTag = prefs.customTags.contains(tag);
-                      return Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 5.w),
-                        child: Stack(
-                          children: [
-                            GestureDetector(
-                              onLongPress : (){
-                                if(isCustomTag) {
-                                  setState(() {
-                                    _tagToDelete = tag;
-                                  });
-                                }
-                             },
-                              child: ChoiceChip(
-                                label: Text(tag,
-                                    style: theme.textTheme.titleMedium?.copyWith(
-                                        color: isSelected ? Colors.white : theme.colorScheme.primary)),
-                                selected: isSelected,
-                                side: BorderSide(color: theme.colorScheme.primary),
-                                backgroundColor: theme.colorScheme.primary.withOpacity(0.2),
-                                selectedColor: theme.colorScheme.primary,
-                                checkmarkColor: Colors.white,
-                                onSelected: (selected) {
-                                  setState(() {
-                                    if (selected) {
-                                      selectedTags.add(tag);
-                                    } else {
-                                      selectedTags.remove(tag);
-                                    }
-                                  });
-                                },
-                              ),
-                            ),
-                            if (_tagToDelete == tag && isCustomTag)
-                              Positioned(
-                                right: 0,
-                                top: -1.7,
-                                child: GestureDetector(
-                                  onTap: () {
-                                    if (prefs.customTags.contains(tag)) {
-                                      context.read<PreferencesProvider>().removeCustomTag(tag);
-                                      prefs.saveCustomTag(prefs.customTags);
-                                    }
+                      ...allTags.map((tag){
+                        bool isSelected = selectedTags.contains(tag);
+                        bool isCustomTag = prefs.customTags.contains(tag);
+                        return Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 5.w),
+                          child: Stack(
+                            children: [
+                              GestureDetector(
+                                onLongPress : (){
+                                  if(isCustomTag) {
                                     setState(() {
-                                      selectedTags.remove(tag);
-                                      _tagToDelete = null;
+                                      _tagToDelete = tag;
+                                    });
+                                  }
+                                },
+                                child: ChoiceChip(
+                                  label: Text(tag,
+                                      style: theme.textTheme.titleMedium?.copyWith(
+                                          color: isSelected ? Colors.white : theme.colorScheme.primary)),
+                                  selected: isSelected,
+                                  side: BorderSide(color: theme.colorScheme.primary),
+                                  backgroundColor: theme.colorScheme.primary.withOpacity(0.2),
+                                  selectedColor: theme.colorScheme.primary,
+                                  checkmarkColor: Colors.white,
+                                  onSelected: (selected) {
+                                    setState(() {
+                                      if (selected) {
+                                        selectedTags.add(tag);
+                                      } else {
+                                        selectedTags.remove(tag);
+                                      }
                                     });
                                   },
-                                  child: Icon(Icons.cancel, color: Colors.red, size: 20),
                                 ),
                               ),
-                          ],
-                        ),
-                      );
+                              if (_tagToDelete == tag && isCustomTag)
+                                Positioned(
+                                  right: 0,
+                                  top: -1.7,
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      if (prefs.customTags.contains(tag)) {
+                                        context.read<PreferencesProvider>().removeCustomTag(tag);
+                                        prefs.saveCustomTag(prefs.customTags);
+                                      }
+                                      setState(() {
+                                        selectedTags.remove(tag);
+                                        _tagToDelete = null;
+                                      });
+                                    },
+                                    child: Icon(Icons.cancel, color: Colors.red, size: 20),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        );
 
-                    }),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 5.w,vertical: 6),
-                      child: CircleAvatar(
-                        radius: 20,
-                        backgroundColor: theme.colorScheme.primary.withOpacity(0.2),
-                        child: IconButton(
-                          onPressed: (){
-                            newTagAlert(context);
-                          },
-                          icon: Icon(Icons.add,color: theme.colorScheme.primary,),
+                      }),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 5.w,vertical: 6),
+                        child: CircleAvatar(
+                          radius: 20,
+                          backgroundColor: theme.colorScheme.primary.withOpacity(0.2),
+                          child: IconButton(
+                            onPressed: (){
+                              newTagAlert(context);
+                            },
+                            icon: Icon(Icons.add,color: theme.colorScheme.primary,),
+                          ),
                         ),
-                      ),
-                    )
-                  ]
-                  ),
+                      )
+                    ]
+                ),
 
                 SizedBox(height: 20.h,),
                 ElevatedButton(
                   onPressed: ()async{
                     if(_key.currentState!.validate()){
                       await submitJournal();
-                      ToastMsg.successToast('Added a new mood journal');
+                      ToastMsg.successToast(AppLocalizations.of(context)!.journal_added_toast);
                       Navigator.pop(context);
                     }
                   },
@@ -391,7 +388,7 @@ class _AddJournalState extends State<AddJournal> {
                       )
                   ),
                   child: dataProvider.isLoading?AppLoader.lightThemeLoader()
-                      :Text('Save',style: theme.textTheme.titleLarge?.copyWith(color: Colors.white,fontWeight: FontWeight.w500),),
+                      :Text(AppLocalizations.of(context)!.save_button,style: theme.textTheme.titleLarge?.copyWith(color: Colors.white,fontWeight: FontWeight.w500),),
                 )
               ],
             ),

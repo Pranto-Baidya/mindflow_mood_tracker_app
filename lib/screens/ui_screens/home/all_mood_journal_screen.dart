@@ -1,5 +1,3 @@
-
-
 import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -23,6 +21,7 @@ import 'package:mindflow_mood_tracker_app_with_firebase/widgets/app_toastMsg/app
 import 'package:mindflow_mood_tracker_app_with_firebase/widgets/custom_listile/custom_listTile.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../../l10n/app_localizations.dart'; // Added import to match AddJournal
 
 class AllMoodJournals extends StatefulWidget {
   const AllMoodJournals({super.key});
@@ -51,7 +50,7 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
     });
   }
 
- @override
+  @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_){
       User? user = FirebaseAuth.instance.currentUser;
@@ -68,7 +67,7 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
   void _showInternetToast() {
     final net = context.read<InternetProvider>();
     if (mounted) {
-      final message = 'Internet connection restored';
+      final message = AppLocalizations.of(context)!.internet_restored_toast;
       if (net.isConnected) {
         ToastMsg.successToast(message);
       }
@@ -82,7 +81,7 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
       await launchUrl(url,mode: LaunchMode.externalApplication);
     }
     else{
-      throw 'Failed to launch url';
+      throw AppLocalizations.of(context)!.failed_launch_url_error;
     }
   }
 
@@ -95,7 +94,7 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
       await launchUrl(emailUri,mode: LaunchMode.externalApplication);
     }
     else{
-      throw 'Could not launch email uri';
+      throw AppLocalizations.of(context)!.failed_launch_email_error;
     }
   }
 
@@ -106,7 +105,7 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
         context: context,
         builder: (BuildContext context){
           return AlertDialog(
-            title: Text('Filter by',style:Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500),),
+            title: Text(AppLocalizations.of(context)!.filter_by_title,style:Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500),),
             content: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -142,8 +141,8 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
                       },
                       tileColor: Colors.transparent,
                       leading: Icon(Icons.date_range,color: Theme.of(context).iconTheme.color,),
-                      title: Text('Selecting date',style: Theme.of(context).textTheme.titleMedium,),
-                      subtitle: data.selectedDate == null? Text('Tap to select') :
+                      title: Text(AppLocalizations.of(context)!.selecting_date,style: Theme.of(context).textTheme.titleMedium,),
+                      subtitle: data.selectedDate == null? Text(AppLocalizations.of(context)!.tap_to_select) :
                       Text('Date: ${DateFormat('d/M/y').format(data.selectedDate!)}',style: Theme.of(context).textTheme.titleSmall,),
                     ),
                   ),
@@ -162,14 +161,14 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
                           });
                         }
                       },
-                        tileColor: Colors.transparent,
+                      tileColor: Colors.transparent,
                       leading: Icon(Icons.access_time,color: Theme.of(context).iconTheme.color,),
-                      title: Text('Selecting time',style: Theme.of(context).textTheme.titleMedium,),
-                      subtitle: data.selectedTime==null? Text('Tap to select') :
+                      title: Text(AppLocalizations.of(context)!.selecting_time,style: Theme.of(context).textTheme.titleMedium,),
+                      subtitle: data.selectedTime==null? Text(AppLocalizations.of(context)!.tap_to_select) :
                       Text('Time : ${data.selectedTime!.hour} : ${data.selectedTime!.minute.toString().padLeft(2, '0')}'),
                     ),
                   )
-              
+
                 ],
               ),
             ),
@@ -181,7 +180,7 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
                     isFiltering = false;
                   });
                 },
-                child:  Text("Cancel",style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.primary),),
+                child:  Text(AppLocalizations.of(context)!.cancel_button,style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Theme.of(context).colorScheme.primary),),
               )
             ],
           );
@@ -194,9 +193,9 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: Text("Wait!",style: theme.textTheme.titleLarge,),
+        title: Text(AppLocalizations.of(context)!.exit_dialog_title,style: theme.textTheme.titleLarge,),
         content: Text(
-          "Are you sure you want to exit from the app?",
+          AppLocalizations.of(context)!.exit_dialog_description,
           style: theme.textTheme.titleMedium,
         ),
         actions: [
@@ -204,7 +203,7 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
             onPressed: () =>
                 Navigator.pop(context, false),
             child: Text(
-              "Cancel",
+              AppLocalizations.of(context)!.cancel_button,
               style: theme.textTheme.titleSmall
                   ?.copyWith(
                 color: theme
@@ -217,7 +216,7 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
             onPressed: () =>
                 SystemNavigator.pop(),
             child: Text(
-              "Yes",
+              AppLocalizations.of(context)!.confirm_button,
               style: theme.textTheme.titleSmall
                   ?.copyWith(color: Colors.red),
             ),
@@ -272,73 +271,73 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
       appBar: AppBar(
         title:
         isSearching?
-            AnimatedMoodContainerWidget(
-              index: 0,
-              offset: Offset(0.5, 0) ,
-              child: TextField(
-                controller: _searchController,
-                cursorColor: theme.colorScheme.primary,
-                decoration: InputDecoration(
-                  hintText: 'Find a mood journal',
-                  hintStyle: theme.textTheme.titleSmall?.copyWith(color: Colors.grey),
-                ),
-                onSubmitted: (value)async{
-                  await context.read<DataProvider>().searchContents(value);
-                  setState(() {
-                    hasSearched = true;
-                  });
-                  context.read<PreferencesProvider>().saveSearchedHistory(value);
-                },
-              ),
-            )
-        :Row(
+        AnimatedMoodContainerWidget(
+          index: 0,
+          offset: Offset(0.5, 0) ,
+          child: TextField(
+            controller: _searchController,
+            cursorColor: theme.colorScheme.primary,
+            decoration: InputDecoration(
+              hintText: AppLocalizations.of(context)!.search_hint,
+              hintStyle: theme.textTheme.titleSmall?.copyWith(color: Colors.grey),
+            ),
+            onSubmitted: (value)async{
+              await context.read<DataProvider>().searchContents(value);
+              setState(() {
+                hasSearched = true;
+              });
+              context.read<PreferencesProvider>().saveSearchedHistory(value);
+            },
+          ),
+        )
+            :Row(
           children: [
             Text(
               'Mindflow',
               style: theme.textTheme.headlineMedium?.copyWith(
-                color: theme.colorScheme.primary,
-                fontWeight: FontWeight.w500
+                  color: theme.colorScheme.primary,
+                  fontWeight: FontWeight.w500
               ),
             ),
           ],
         ),
         systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarBrightness: isDark? Brightness.light:Brightness.light
+            statusBarBrightness: isDark? Brightness.light:Brightness.light
         ),
         backgroundColor: Colors.transparent,
         actions: [
           isSearching?
           SizedBox()
-          :
+              :
           user != null && user.photoURL != null
               ? Padding(
             padding:  EdgeInsets.only(right: 15.w),
-                child: InkWell(
-                  onTap: (){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>Profile()));
+            child: InkWell(
+              onTap: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>Profile()));
 
-                  },
-                  child: ClipOval(
-                              child: Image.network(user.photoURL!, fit: BoxFit.cover, width: 38.w, height: 38.w,),
-                            ),
-                ),
-              )
+              },
+              child: ClipOval(
+                child: Image.network(user.photoURL!, fit: BoxFit.cover, width: 38.w, height: 38.w,),
+              ),
+            ),
+          )
               : Padding(
             padding:  EdgeInsets.only(right: 15.w),
             child: CircleAvatar(
               radius: 20,
               backgroundColor: theme.colorScheme.primary.withOpacity(0.2),
               child: IconButton(
-                 onPressed: (){
-                   Navigator.push(context, MaterialPageRoute(builder: (context)=>Profile()));
-                 },
+                  onPressed: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>Profile()));
+                  },
                   icon : Icon(Icons.person, color: Theme.of(context).colorScheme.primary)
               ),
             ),
           ),
           isSearching?
-              SizedBox()
-          :Padding(
+          SizedBox()
+              :Padding(
             padding:  EdgeInsets.only(right: 15.w),
             child: CircleAvatar(
               radius: 20,
@@ -380,19 +379,19 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
           children: [
             SizedBox(height: 20.h),
             isSearching?
-                SizedBox()
-            :Row(
+            SizedBox()
+                :Row(
               children: [
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 5.h),
                   child: data.isLoading || data.journals.isEmpty ? Text('')
-                      : isFiltering?Text('Showing filtered results', style: theme.textTheme.headlineSmall,)
-                      :Text('Your daily mood records', style: theme.textTheme.headlineSmall,),
+                      : isFiltering?Text(AppLocalizations.of(context)!.filtered_results, style: theme.textTheme.headlineSmall,)
+                      :Text(AppLocalizations.of(context)!.daily_mood_records, style: theme.textTheme.headlineSmall,),
                 ),
                 Spacer(),
                 data.isLoading || data.journals.isEmpty?
-                    SizedBox()
-                :
+                SizedBox()
+                    :
                 Padding(
                   padding:  EdgeInsets.only(right: 15.w),
                   child: CircleAvatar(
@@ -475,7 +474,7 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
                                     :Lottie.asset('assets/sad_light.json',fit: BoxFit.cover,width: 500.w,height: 180.h),
                                 SizedBox(height: 10.h,),
                                 Center(
-                                    child: isSearching?Text('No mood journals found',style: theme.textTheme.titleMedium,) :Text('No mood journals to show, add one to see',style: theme.textTheme.titleMedium,)),
+                                    child: isSearching?Text(AppLocalizations.of(context)!.no_mood_journals_found,style: theme.textTheme.titleMedium,) :Text(AppLocalizations.of(context)!.no_mood_journals_prompt,style: theme.textTheme.titleMedium,)),
                               ],
                             ),
                           )
@@ -508,9 +507,9 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
                                       final confirmed = await showDialog(
                                         context: context,
                                         builder: (_) => AlertDialog(
-                                          title: Text("Confirm Delete",style: theme.textTheme.titleLarge,),
+                                          title: Text(AppLocalizations.of(context)!.delete_dialog_title,style: theme.textTheme.titleLarge,),
                                           content: Text(
-                                            "Are you sure you want to delete this journal?",
+                                            AppLocalizations.of(context)!.delete_dialog_description,
                                             style: theme.textTheme.titleMedium,
                                           ),
                                           actions: [
@@ -518,7 +517,7 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
                                               onPressed: () =>
                                                   Navigator.pop(context, false),
                                               child: Text(
-                                                "Cancel",
+                                                AppLocalizations.of(context)!.cancel_button,
                                                 style: theme.textTheme.titleSmall
                                                     ?.copyWith(
                                                   color: theme
@@ -531,7 +530,7 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
                                               onPressed: () =>
                                                   Navigator.pop(context, true),
                                               child: Text(
-                                                "Delete",
+                                                AppLocalizations.of(context)!.delete_button,
                                                 style: theme.textTheme.titleSmall
                                                     ?.copyWith(color: Colors.red),
                                               ),
@@ -578,63 +577,63 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
                                     child: Icon(Icons.edit, color: Colors.white),
                                   ),
                                   child: AnimatedMoodContainerWidget(
-                                    index: index,
-                                    offset: Offset(0, 0.2),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: _getBackgroundColor(result.mood).withOpacity(0.15),
-                                        borderRadius: BorderRadius.circular(15.r),
-                                      ),
-                                      child: ListTile(
-                                        tileColor: Colors.transparent,
-                                        contentPadding: EdgeInsets.all(20),
-                                        leading: CircleAvatar(
-                                          backgroundColor: _getBackgroundColor(
-                                            result.mood,
+                                      index: index,
+                                      offset: Offset(0, 0.2),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: _getBackgroundColor(result.mood).withOpacity(0.15),
+                                          borderRadius: BorderRadius.circular(15.r),
+                                        ),
+                                        child: ListTile(
+                                          tileColor: Colors.transparent,
+                                          contentPadding: EdgeInsets.all(20),
+                                          leading: CircleAvatar(
+                                            backgroundColor: _getBackgroundColor(
+                                              result.mood,
+                                            ),
+                                            child: Icon(_moodIcon(result.mood)),
                                           ),
-                                          child: Icon(_moodIcon(result.mood)),
-                                        ),
-                                        title: Text(
-                                          result.content,
-                                          style: theme.textTheme.titleMedium?.copyWith(fontSize: 18.sp),
-                                        ),
-                                        subtitle: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            SizedBox(height: 20.h,),
-                                            Text(
-                                              'Date :    ${DateFormat('d/M/y').format(result.date)}, ${result.time.format(context)}',
-                                              style:
-                                              theme.textTheme.titleMedium,
-                                            ),
-                                            SizedBox(height: 10.h),
-                                            SingleChildScrollView(
-                                              scrollDirection: Axis.horizontal,
-                                              child: Row(
-                                                children: [
-                                                  Text(
-                                                    'Tags :  ',
-                                                    style: theme
-                                                        .textTheme
-                                                        .titleMedium,
-                                                  ),
-                                                  ...result.tags.map((tag){
-                                                    return Padding(
-                                                      padding:  EdgeInsets.symmetric(horizontal: 5.w),
-                                                      child: Chip(
-                                                        label: Text(tag,style: theme.textTheme.titleSmall?.copyWith(color: theme.colorScheme.primary,)),
-                                                        backgroundColor: theme.colorScheme.primary.withOpacity(0.1),
-                                                        side: BorderSide(color: theme.colorScheme.primary,),
-                                                      ),
-                                                    );
-                                                  })
-                                                ],
+                                          title: Text(
+                                            result.content,
+                                            style: theme.textTheme.titleMedium?.copyWith(fontSize: 18.sp),
+                                          ),
+                                          subtitle: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              SizedBox(height: 20.h,),
+                                              Text(
+                                                '${AppLocalizations.of(context)!.date_label} :    ${DateFormat('d/M/y').format(result.date)}, ${result.time.format(context)}',
+                                                style:
+                                                theme.textTheme.titleMedium,
                                               ),
-                                            ),
-                                          ],
+                                              SizedBox(height: 10.h),
+                                              SingleChildScrollView(
+                                                scrollDirection: Axis.horizontal,
+                                                child: Row(
+                                                  children: [
+                                                    Text(
+                                                      AppLocalizations.of(context)!.tags_label,
+                                                      style: theme
+                                                          .textTheme
+                                                          .titleMedium,
+                                                    ),
+                                                    ...result.tags.map((tag){
+                                                      return Padding(
+                                                        padding:  EdgeInsets.symmetric(horizontal: 5.w),
+                                                        child: Chip(
+                                                          label: Text(tag,style: theme.textTheme.titleSmall?.copyWith(color: theme.colorScheme.primary,)),
+                                                          backgroundColor: theme.colorScheme.primary.withOpacity(0.1),
+                                                          side: BorderSide(color: theme.colorScheme.primary,),
+                                                        ),
+                                                      );
+                                                    })
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    )
+                                      )
                                   ),
                                 ),
                               );
@@ -656,14 +655,14 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
                           Padding(
                             padding:  EdgeInsets.symmetric(horizontal: 20.w),
                             child: Text(
-                              'No internet connection', style: theme.textTheme.titleLarge,
+                              AppLocalizations.of(context)!.no_internet_message, style: theme.textTheme.titleLarge,
                             ),
                           )
                         ],
                       ),
                     );
                   }
-              }
+                }
             )
           ],
         ),
@@ -674,39 +673,49 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
           padding: EdgeInsets.all(0),
           children: [
             UserAccountsDrawerHeader(
-                accountName: Text(user?.displayName ?? '',style: theme.textTheme.titleMedium?.copyWith(color: Colors.white),),
-                accountEmail: Text(user?.email?? '',style: theme.textTheme.titleMedium?.copyWith(color: Colors.white),),
-                currentAccountPicture: user?.photoURL!=null?ClipOval(child: Image.network(user?.photoURL??'',width: 40,height: 40,))
-                    :CircleAvatar(
-                  radius: 40,
-                  backgroundColor: Colors.white,
-                  child: Icon(Icons.person,color: theme.colorScheme.primary,size: 40,),
-                ),
-                margin: EdgeInsets.all(0),
-                decoration: BoxDecoration(
+              accountName: Text(user?.displayName ?? '',style: theme.textTheme.titleMedium?.copyWith(color: Colors.white),),
+              accountEmail: Text(user?.email?? '',style: theme.textTheme.titleMedium?.copyWith(color: Colors.white),),
+              currentAccountPicture: user?.photoURL!=null?
+              GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Profile()));
+                },
+                  child: ClipOval(child: Image.network(user?.photoURL??'',width: 40,height: 40,)))
+                  :GestureDetector(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>Profile()));
+                  },
+                    child: CircleAvatar(
+                                    radius: 40,
+                                    backgroundColor: Colors.white,
+                                    child: Icon(Icons.person,color: theme.colorScheme.primary,size: 40,),
+                                  ),
+                  ),
+              margin: EdgeInsets.all(0),
+              decoration: BoxDecoration(
                   color: theme.colorScheme.primary
-                ),
+              ),
             ),
             SizedBox(height: 20.h,),
             AnimatedMoodContainerWidget(
-              index: 1,
-              offset: Offset(0, 0.2),
-              child: CustomListTile(
-                  leadingIcon: Icons.show_chart,
-                  title: 'View mood stats',
-                  onTap:(){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>MoodPieChartScreen()));
-                  }
-              )
+                index: 1,
+                offset: Offset(0, 0.2),
+                child: CustomListTile(
+                    leadingIcon: Icons.show_chart,
+                    title: AppLocalizations.of(context)!.view_mood_stats,
+                    onTap:(){
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>MoodPieChartScreen()));
+                    }
+                )
             ),
             AnimatedMoodContainerWidget(
                 index: 2,
                 offset: Offset(0, 0.2),
                 child: CustomListTile(
                     leadingIcon: Icons.history,
-                    title: 'History',
+                    title: AppLocalizations.of(context)!.history,
                     onTap:(){
-                       Navigator.push(context, MaterialPageRoute(builder: (context)=>SearchHistory()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>SearchHistory()));
                     }
                 )
             ),
@@ -715,7 +724,7 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
                 offset: Offset(0, 0.2),
                 child: CustomListTile(
                     leadingIcon: Icons.bug_report_outlined,
-                    title: 'Report a bug',
+                    title: AppLocalizations.of(context)!.report_bug,
                     onTap:()async{
                       await _launchEmail();
                     }
@@ -726,7 +735,7 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
                 offset: Offset(0, 0.2),
                 child: CustomListTile(
                     leadingIcon: Icons.info_outline,
-                    title: 'About dev',
+                    title: AppLocalizations.of(context)!.about_dev,
                     onTap:()async{
                       await _launchUrl();
                     }
@@ -737,7 +746,7 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
                 offset: Offset(0, 0.2),
                 child: CustomListTile(
                     leadingIcon: Icons.power_settings_new_outlined,
-                    title: 'Exit app',
+                    title: AppLocalizations.of(context)!.exit_app,
                     onTap:(){
                       exitAppDialogue(context);
                     }
@@ -750,6 +759,13 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
   }
   Widget _buildMoodChip(String mood, ThemeData theme) {
     final color = _getBackgroundColor(mood);
+    final moodLabels = {
+      'Very happy': AppLocalizations.of(context)!.mood_very_happy,
+      'Happy': AppLocalizations.of(context)!.mood_happy,
+      'Neutral': AppLocalizations.of(context)!.mood_neutral,
+      'Sad': AppLocalizations.of(context)!.mood_sad,
+      'Depressed': AppLocalizations.of(context)!.mood_depressed,
+    };
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 5.w),
       child: Container(
@@ -768,7 +784,7 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
             ),
             SizedBox(width: 10.w),
             Text(
-              mood,
+              moodLabels[mood]!,
               style: theme.textTheme.titleMedium?.copyWith(color: color),
             ),
           ],

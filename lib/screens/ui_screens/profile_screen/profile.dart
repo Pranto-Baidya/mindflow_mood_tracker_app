@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mindflow_mood_tracker_app_with_firebase/provider/locale_provider/locale_provider.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/provider/preferences_provider/preferences_provider.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/provider/theme_provider/theme_provider.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/screens/auth_screens/sign_in_sign_up/sign_in_sign_up.dart';
@@ -9,6 +10,8 @@ import 'package:mindflow_mood_tracker_app_with_firebase/widgets/app_loader/app_l
 import 'package:mindflow_mood_tracker_app_with_firebase/widgets/app_toastMsg/app_toastMsg.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/widgets/custom_listile/custom_listTile.dart';
 import 'package:provider/provider.dart';
+import '../../../l10n/app_localizations.dart';
+import '../../../notification_service/local_notification.dart';
 import '../../../provider/auth_provider/auth_provider.dart';
 import '../../../provider/local_auth_provider/local_auth_provider.dart';
 
@@ -55,16 +58,16 @@ class _ProfileState extends State<Profile> {
     _bioController.text = context.watch<PreferencesProvider>().bio??'';
     super.didChangeDependencies();
   }
-  
+
   void changeTheme(BuildContext context){
     var theme = Theme.of(context);
     final themeProvider = context.read<ThemeProvider>();
     AppThemeMode selected = themeProvider.mode;
     showDialog(
-        context: context, 
+        context: context,
         builder: (BuildContext context){
           return AlertDialog(
-            title: Text('Change theme',style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500),),
+            title: Text(AppLocalizations.of(context)!.change_theme_title,style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500),),
             content: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -73,15 +76,15 @@ class _ProfileState extends State<Profile> {
                     return RadioListTile(
                       tileColor: Colors.transparent,
                       title: mode==AppThemeMode.light?
-                      Text('Light mode',style: theme.textTheme.titleMedium,)
-                      :mode==AppThemeMode.dark?Text('Dark mode',style: theme.textTheme.titleMedium,)
-                      :Text('System default',style: theme.textTheme.titleMedium,),
-                        value: mode,
-                        groupValue: selected,
-                        onChanged: (value){
-                          themeProvider.setTheme(mode);
-                          Navigator.pop(context);
-                        },
+                      Text(AppLocalizations.of(context)!.light_mode,style: theme.textTheme.titleMedium,)
+                          :mode==AppThemeMode.dark?Text(AppLocalizations.of(context)!.dark_mode,style: theme.textTheme.titleMedium,)
+                          :Text(AppLocalizations.of(context)!.system_default,style: theme.textTheme.titleMedium,),
+                      value: mode,
+                      groupValue: selected,
+                      onChanged: (value){
+                        themeProvider.setTheme(mode);
+                        Navigator.pop(context);
+                      },
                     );
                   })
                 ],
@@ -91,14 +94,15 @@ class _ProfileState extends State<Profile> {
               TextButton(
                   onPressed: (){
                     Navigator.pop(context);
-                  }, 
-                  child: Text('Cancel',style: theme.textTheme.titleMedium?.copyWith(color: Colors.red),)
+                  },
+                  child: Text(AppLocalizations.of(context)!.cancel_button,style: theme.textTheme.titleMedium?.copyWith(color: Colors.red),)
               )
             ],
           );
         }
     );
   }
+
 
   void enableLocalAuthAlert(BuildContext context){
     var theme = Theme.of(context);
@@ -107,7 +111,7 @@ class _ProfileState extends State<Profile> {
         context: context,
         builder: (BuildContext context){
           return AlertDialog(
-            title: Text('Set a new 4 digit pin',style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500),),
+            title: Text(AppLocalizations.of(context)!.set_pin_title,style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500),),
             content: Form(
               key: _pinLockKey,
               child: SingleChildScrollView(
@@ -119,17 +123,17 @@ class _ProfileState extends State<Profile> {
                       cursorColor: theme.colorScheme.primary,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return "Please enter a 4-digit pin code";
+                          return AppLocalizations.of(context)!.pin_empty_error;
                         }
                         if (value.length != 4) {
-                          return "Pin code must be exactly 4 digits";
+                          return AppLocalizations.of(context)!.pin_length_error;
                         }
                         return null;
                       },
 
                       decoration: InputDecoration(
-                        hintText: 'Enter your 4 digit pin code',
-                        hintStyle: theme.textTheme.titleSmall?.copyWith(color: Colors.grey)
+                          hintText: AppLocalizations.of(context)!.pin_hint,
+                          hintStyle: theme.textTheme.titleSmall?.copyWith(color: Colors.grey)
                       ),
                     ),
                     SizedBox(height: 20.h,),
@@ -138,20 +142,20 @@ class _ProfileState extends State<Profile> {
                           if(_pinLockKey.currentState!.validate()){
                             await provider.savePin(_pinController.text);
                             await context.read<PreferencesProvider>().toggleLocalAuth(true);
-                            ToastMsg.successToast('Pin lock enabled successfully');
+                            ToastMsg.successToast(AppLocalizations.of(context)!.pin_lock_enabled_toast);
                             Navigator.pop(context);
                             _pinController.clear();
                           }
                         },
                         style: ElevatedButton.styleFrom(
-                            elevation: 0,
-                            backgroundColor: theme.colorScheme.primary,
-                            minimumSize: Size(double.infinity.w, 50.h),
-                            shape: RoundedRectangleBorder(
+                          elevation: 0,
+                          backgroundColor: theme.colorScheme.primary,
+                          minimumSize: Size(double.infinity.w, 50.h),
+                          shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30.r)
-                            ),
+                          ),
                         ),
-                        child: Text('Set pin lock', style: theme.textTheme.titleLarge?.copyWith(color: Colors.white,fontWeight: FontWeight.w500),)
+                        child: Text(AppLocalizations.of(context)!.set_pin_button, style: theme.textTheme.titleLarge?.copyWith(color: Colors.white,fontWeight: FontWeight.w500),)
                     )
                   ],
                 ),
@@ -162,15 +166,13 @@ class _ProfileState extends State<Profile> {
                   onPressed: (){
                     Navigator.pop(context);
                   },
-                  child: Text('Cancel',style: theme.textTheme.titleMedium?.copyWith(color: Colors.red),)
+                  child: Text(AppLocalizations.of(context)!.cancel_button,style: theme.textTheme.titleMedium?.copyWith(color: Colors.red),)
               )
             ],
           );
         }
     );
   }
-
-
 
   void updatePassAlert(BuildContext context){
     var theme = Theme.of(context);
@@ -179,28 +181,28 @@ class _ProfileState extends State<Profile> {
         context: context,
         builder: (BuildContext context){
           return AlertDialog(
-            title: Text('Update password',style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500),),
+            title: Text(AppLocalizations.of(context)!.update_password_title,style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500),),
             content: Form(
               key: _updatePassKey,
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    Text('Fill up the credentials below & update your password',style: theme.textTheme.titleMedium,),
+                    Text(AppLocalizations.of(context)!.update_password_description,style: theme.textTheme.titleMedium,),
                     SizedBox(height: 20.h,),
                     TextFormField(
-                     controller: _emailController,
+                      controller: _emailController,
                       validator: (value){
-                       if(value!.isEmpty){
-                         return 'Please enter your email address';
-                       }
-                       if(!value.contains('@') || !value.contains('.com')){
-                         return 'Please enter a valid email address';
-                       }
-                       return null;
+                        if(value!.isEmpty){
+                          return AppLocalizations.of(context)!.email_empty_error;
+                        }
+                        if(!value.contains('@') || !value.contains('.com')){
+                          return AppLocalizations.of(context)!.email_invalid_error;
+                        }
+                        return null;
                       },
                       decoration: InputDecoration(
-                        hintText: 'Enter your email',
-                        hintStyle: theme.textTheme.titleSmall?.copyWith(color: Colors.grey)
+                          hintText: AppLocalizations.of(context)!.email_hint,
+                          hintStyle: theme.textTheme.titleSmall?.copyWith(color: Colors.grey)
                       ),
                     ),
                     SizedBox(height: 20.h,),
@@ -209,12 +211,12 @@ class _ProfileState extends State<Profile> {
                       obscureText: true,
                       validator: (value){
                         if(value!.isEmpty){
-                          return 'Please enter your current password';
+                          return AppLocalizations.of(context)!.current_password_empty_error;
                         }
                         return null;
                       },
                       decoration: InputDecoration(
-                          hintText: 'Enter your current password',
+                          hintText: AppLocalizations.of(context)!.current_password_hint,
                           hintStyle: theme.textTheme.titleSmall?.copyWith(color: Colors.grey)
                       ),
                     ),
@@ -224,32 +226,32 @@ class _ProfileState extends State<Profile> {
                       obscureText: true,
                       validator: (value){
                         if(value!.isEmpty){
-                          return 'Please enter your new password';
+                          return AppLocalizations.of(context)!.new_password_empty_error;
                         }
                         return null;
                       },
                       decoration: InputDecoration(
-                          hintText: 'Enter your new password',
+                          hintText: AppLocalizations.of(context)!.new_password_hint,
                           hintStyle: theme.textTheme.titleSmall?.copyWith(color: Colors.grey)
                       ),
                     ),
                     SizedBox(height: 20.h,),
                     ElevatedButton(
                         onPressed: ()async{
-                         if(_updatePassKey.currentState!.validate()){
-                           bool success = await auth.reauthenticateAndChangePassword(
-                               email: _emailController.text.trim(),
-                               currentPassword: _currentPassController.text.trim(),
-                               newPassword: _newPassController.text.trim()
-                           );
-                           if(success){
-                             ToastMsg.successToast('Password updated successfully, Please re login with new password');
-                             Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>SignInSignUp()));
-                           }
-                           else{
-                             ToastMsg.errorToast(auth.errorMsg!);
-                           }
-                         }
+                          if(_updatePassKey.currentState!.validate()){
+                            bool success = await auth.reauthenticateAndChangePassword(
+                                email: _emailController.text.trim(),
+                                currentPassword: _currentPassController.text.trim(),
+                                newPassword: _newPassController.text.trim()
+                            );
+                            if(success){
+                              ToastMsg.successToast(AppLocalizations.of(context)!.password_updated_toast);
+                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>SignInSignUp()));
+                            }
+                            else{
+                              ToastMsg.errorToast(auth.errorMsg!);
+                            }
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           elevation: 0,
@@ -259,7 +261,7 @@ class _ProfileState extends State<Profile> {
                             borderRadius: BorderRadius.circular(30.r),
                           ),
                         ),
-                        child: context.watch<AuthProvider>().isLoading?AppLoader.lightThemeLoader():Text('Update password',style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500,color: Colors.white),)
+                        child: context.watch<AuthProvider>().isLoading?AppLoader.lightThemeLoader():Text(AppLocalizations.of(context)!.update_password_title,style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500,color: Colors.white),)
                     )
                   ],
                 ),
@@ -269,8 +271,8 @@ class _ProfileState extends State<Profile> {
               TextButton(
                   onPressed: (){
                     Navigator.pop(context);
-                  }, 
-                  child: Text('Cancel',style: theme.textTheme.titleMedium?.copyWith(color: Colors.red),)
+                  },
+                  child: Text(AppLocalizations.of(context)!.cancel_button,style: theme.textTheme.titleMedium?.copyWith(color: Colors.red),)
               )
             ],
           );
@@ -285,27 +287,27 @@ class _ProfileState extends State<Profile> {
         context: context,
         builder: (BuildContext context){
           return AlertDialog(
-            title: Text('Delete account',style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500,color: Colors.red),),
+            title: Text(AppLocalizations.of(context)!.delete_account_title,style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500,color: Colors.red),),
             content: Form(
               key: _deletePassKey,
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    Text('Are you sure you want to delete this account?\nThis can not be undone',style: theme.textTheme.titleMedium,),
+                    Text(AppLocalizations.of(context)!.delete_account_description,style: theme.textTheme.titleMedium,),
                     SizedBox(height: 20.h,),
                     TextFormField(
                       controller: _emailController,
                       validator: (value){
                         if(value!.isEmpty){
-                          return 'Please enter your email address';
+                          return AppLocalizations.of(context)!.email_empty_error;
                         }
                         if(!value.contains('@') || !value.contains('.com')){
-                          return 'Please enter a valid email address';
+                          return AppLocalizations.of(context)!.email_invalid_error;
                         }
                         return null;
                       },
                       decoration: InputDecoration(
-                          hintText: 'Enter your email',
+                          hintText: AppLocalizations.of(context)!.email_hint,
                           hintStyle: theme.textTheme.titleSmall?.copyWith(color: Colors.grey)
                       ),
                     ),
@@ -315,12 +317,12 @@ class _ProfileState extends State<Profile> {
                       obscureText: true,
                       validator: (value){
                         if(value!.isEmpty){
-                          return 'Please enter your current password';
+                          return AppLocalizations.of(context)!.current_password_empty_error;
                         }
                         return null;
                       },
                       decoration: InputDecoration(
-                          hintText: 'Enter your current password',
+                          hintText: AppLocalizations.of(context)!.current_password_hint,
                           hintStyle: theme.textTheme.titleSmall?.copyWith(color: Colors.grey)
                       ),
                     ),
@@ -329,11 +331,11 @@ class _ProfileState extends State<Profile> {
                         onPressed: ()async{
                           if(_deletePassKey.currentState!.validate()){
                             bool success = await auth.reauthenticateAndDeleteAccount(
-                                email: _emailController.text.trim(),
-                                password: _currentPassController.text.trim(),
+                              email: _emailController.text.trim(),
+                              password: _currentPassController.text.trim(),
                             );
                             if(success){
-                              ToastMsg.successToast('Account deletion successful');
+                              ToastMsg.successToast(AppLocalizations.of(context)!.account_deletion_toast);
                               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>SignInSignUp()));
                             }
                             else{
@@ -349,7 +351,7 @@ class _ProfileState extends State<Profile> {
                             borderRadius: BorderRadius.circular(30.r),
                           ),
                         ),
-                        child: context.watch<AuthProvider>().isLoading?AppLoader.lightThemeLoader():Text('Delete account',style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500,color: Colors.white),)
+                        child: context.watch<AuthProvider>().isLoading?AppLoader.lightThemeLoader():Text(AppLocalizations.of(context)!.delete_account_title,style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500,color: Colors.white),)
                     )
                   ],
                 ),
@@ -360,7 +362,7 @@ class _ProfileState extends State<Profile> {
                   onPressed: (){
                     Navigator.pop(context);
                   },
-                  child: Text('Cancel',style: theme.textTheme.titleMedium?.copyWith(color: Colors.red),)
+                  child: Text(AppLocalizations.of(context)!.cancel_button,style: theme.textTheme.titleMedium?.copyWith(color: Colors.red),)
               )
             ],
           );
@@ -368,15 +370,17 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
+
     var theme = Theme.of(context);
     final prefs = context.watch<PreferencesProvider>();
     bool isDark = context.watch<ThemeProvider>().currentTheme == ThemeMode.dark;
+    final locale = context.read<LocaleProvider>();
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('User profile', style: theme.textTheme.headlineMedium),
+        title: Text(AppLocalizations.of(context)!.user_profile_title, style: theme.textTheme.headlineMedium),
         iconTheme: theme.iconTheme,
         backgroundColor: Colors.transparent,
         systemOverlayStyle: SystemUiOverlayStyle(
@@ -394,12 +398,11 @@ class _ProfileState extends State<Profile> {
               backgroundImage: NetworkImage(user?.photoURL ?? ''),
             )
                 :
-                CircleAvatar(
-                  radius: 50.r,
-                  backgroundColor: theme.colorScheme.primary.withOpacity(0.2),
-                  child: Icon(Icons.person, color: theme.colorScheme.primary, size: 60),
-                ),
-
+            CircleAvatar(
+              radius: 50.r,
+              backgroundColor: theme.colorScheme.primary.withOpacity(0.2),
+              child: Icon(Icons.person, color: theme.colorScheme.primary, size: 60),
+            ),
 
             SizedBox(height: 20.h),
             Text(
@@ -422,7 +425,7 @@ class _ProfileState extends State<Profile> {
                             controller: _bioController,
                             cursorColor: theme.colorScheme.primary,
                             decoration: InputDecoration(
-                              hintText: 'Add a bio',
+                              hintText: AppLocalizations.of(context)!.add_bio_hint,
                               hintStyle: theme.textTheme.titleMedium?.copyWith(color: Colors.grey),
                             ),
                           ),
@@ -437,7 +440,7 @@ class _ProfileState extends State<Profile> {
                               isAddingBio = false;
                             });
                           },
-                          child: Text('Save', style: TextStyle(fontSize: 15, color: theme.colorScheme.primary)),
+                          child: Text(AppLocalizations.of(context)!.save_button, style: TextStyle(fontSize: 15, color: theme.colorScheme.primary)),
                         ),
                         TextButton(
                           onPressed: () {
@@ -445,7 +448,7 @@ class _ProfileState extends State<Profile> {
                               isAddingBio = false;
                             });
                           },
-                          child: Text('Cancel', style: TextStyle(fontSize: 15, color: Colors.red)),
+                          child: Text(AppLocalizations.of(context)!.cancel_button, style: TextStyle(fontSize: 15, color: Colors.red)),
                         ),
                       ],
                     )
@@ -462,7 +465,7 @@ class _ProfileState extends State<Profile> {
                         });
                       },
                       child: Text(
-                        'Write something about yourself',
+                        AppLocalizations.of(context)!.write_bio_prompt,
                         style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w500,color: Colors.grey),
                       ),
                     ),
@@ -493,38 +496,89 @@ class _ProfileState extends State<Profile> {
               children: [
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
-                  child: Text('Personalisation',style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500)),
+                  child: Text(AppLocalizations.of(context)!.personalisation_section,style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500)),
                 ),
               ],
             ),
             SizedBox(height: 10.h,),
             CustomListTile(
-                title: 'Change theme',
+                title: AppLocalizations.of(context)!.change_theme_title,
                 leadingIcon: isDark?Icons.dark_mode: context.watch<ThemeProvider>().currentTheme==ThemeMode.system?Icons.android:Icons.light_mode,
                 onTap: (){
                   changeTheme(context);
                 }
             ),
-            CustomListTile(
-                title: 'Change language',
-                leadingIcon: Icons.language,
-                onTap: (){
-
-                }
+            Padding(
+              padding:  EdgeInsets.symmetric(horizontal: 20.w),
+              child: Card(
+                elevation: 0,
+                color: theme.cardColor,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                child: ListTile(
+                    tileColor: Colors.transparent,
+                    contentPadding: EdgeInsetsGeometry.all(10),
+                    leading: Padding(
+                      padding: EdgeInsets.only(left: 8.w),
+                      child: Icon(Icons.language,color: theme.iconTheme.color,),
+                    ),
+                    title: Text(AppLocalizations.of(context)!.change_language_title,style: theme.textTheme.titleMedium,),
+                    trailing: DropdownButton(
+                      dropdownColor: theme.dropdownMenuTheme.menuStyle?.backgroundColor?.resolve(({})),
+                      value: context.watch<LocaleProvider>().locale,
+                      items: [
+                        DropdownMenuItem(
+                            value: Locale('en'),
+                            child: Text('English', style: theme.textTheme.titleMedium)),
+                        DropdownMenuItem(
+                            value: Locale('bn'),
+                            child: Text('বাংলা', style: theme.textTheme.titleMedium)),
+                      ],
+                      onChanged: (Locale? loc) {
+                        if (loc != null) {
+                          locale.setLocale(loc);
+                        }
+                      },
+                    )
+                ),
+              ),
             ),
-            CustomListTile(
-                title: 'Notifications',
-                leadingIcon: Icons.notifications,
-                onTap: (){
+            Padding(
+              padding:  EdgeInsets.symmetric(horizontal: 20.w),
+              child: Card(
+                elevation: 0,
+                color: theme.cardColor,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                child: ListTile(
+                    tileColor: Colors.transparent,
+                    contentPadding: EdgeInsetsGeometry.all(10),
+                    leading: Padding(
+                      padding: EdgeInsets.only(left: 8.w),
+                      child: Icon(Icons.notifications_sharp,color: theme.iconTheme.color,),
+                    ),
+                    title: Text(AppLocalizations.of(context)!.allow_notifications,style: theme.textTheme.titleMedium,),
+                    trailing: Switch(
+                      value: context.watch<PreferencesProvider>().isNotificationEnabled,
+                      onChanged: (value) async {
+                        context.read<PreferencesProvider>().setNotification(value);
+                        if (value) {
+                          await NotificationService.showImmediateNotification();
+                          await NotificationService.showNotificationAt();
+                        }
+                        else {
+                          await NotificationService.cancelNotifications();
+                        }
+                      },
+                    ),
 
-                }
+                ),
+              ),
             ),
             SizedBox(height: 10.h,),
             Row(
               children: [
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
-                  child: Text('Security',style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500)),
+                  child: Text(AppLocalizations.of(context)!.security_section,style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500)),
                 ),
               ],
             ),
@@ -536,31 +590,31 @@ class _ProfileState extends State<Profile> {
                 color: theme.cardColor,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                 child: ListTile(
-                  tileColor: Colors.transparent,
-                  contentPadding: EdgeInsetsGeometry.all(10),
-                  leading: Padding(
-                    padding: EdgeInsets.only(left: 8.w),
-                    child: Icon(Icons.lock,color: theme.iconTheme.color,),
-                  ),
-                  title: Text('Enable Biometric / Pin lock',style: theme.textTheme.titleMedium,),
-                  trailing: Switch(
-                      value: prefs.isAuthEnabled,
-                      onChanged: (value)async{
-                        final localAuth = context.read<LocalAuthProvider>();
-                        if(value){
-                          if (!localAuth.isPinSet) {
-                            enableLocalAuthAlert(context);
+                    tileColor: Colors.transparent,
+                    contentPadding: EdgeInsetsGeometry.all(10),
+                    leading: Padding(
+                      padding: EdgeInsets.only(left: 8.w),
+                      child: Icon(Icons.lock,color: theme.iconTheme.color,),
+                    ),
+                    title: Text(AppLocalizations.of(context)!.enable_biometric_pin_lock,style: theme.textTheme.titleMedium,),
+                    trailing: Switch(
+                        value: prefs.isAuthEnabled,
+                        onChanged: (value)async{
+                          final localAuth = context.read<LocalAuthProvider>();
+                          if(value){
+                            if (!localAuth.isPinSet) {
+                              enableLocalAuthAlert(context);
+                            }
+                            else{
+                              await context.read<PreferencesProvider>().toggleLocalAuth(true);
+                            }
                           }
                           else{
-                            await context.read<PreferencesProvider>().toggleLocalAuth(true);
+                            await context.read<PreferencesProvider>().toggleLocalAuth(false);
+                            await localAuth.deletePin();
                           }
                         }
-                        else{
-                          await context.read<PreferencesProvider>().toggleLocalAuth(false);
-                          await localAuth.deletePin();
-                        }
-                      }
-                  )
+                    )
                 ),
               ),
             ),
@@ -569,28 +623,47 @@ class _ProfileState extends State<Profile> {
               children: [
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
-                  child: Text('Account',style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500)),
+                  child: Text(AppLocalizations.of(context)!.account_section,style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500)),
                 ),
               ],
             ),
             SizedBox(height: 10.h,),
-            CustomListTile(
-                title: 'Sign out',
-                leadingIcon: Icons.logout,
+            Padding(
+              padding:  EdgeInsets.symmetric(horizontal: 20.w),
+              child: GestureDetector(
                 onTap: ()async{
                   await context.read<AuthProvider>().signOut();
                   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>SignInSignUp()));
-                }
+                },
+                child: Card(
+                  elevation: 0,
+                  color: theme.cardColor,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                  child: ListTile(
+                      tileColor: Colors.transparent,
+                      contentPadding: EdgeInsetsGeometry.all(10),
+                      leading: Padding(
+                        padding: EdgeInsets.only(left: 8.w),
+                        child: Icon(Icons.logout,color: theme.iconTheme.color,),
+                      ),
+                      title: Text(AppLocalizations.of(context)!.sign_out_title,style: theme.textTheme.titleMedium,),
+                      trailing: context.watch<AuthProvider>().isLoading?Padding(
+                        padding: EdgeInsets.only(right: 8.w),
+                        child: isDark?AppLoader.darkThemeLoaderPrimarySmall():AppLoader.lightThemeLoaderPrimarySmall(),
+                      ):Icon(Icons.arrow_forward_ios_outlined,color: theme.iconTheme.color,)
+                  ),
+                ),
+              ),
             ),
             CustomListTile(
-                title: 'Change password',
+                title: AppLocalizations.of(context)!.change_password_title,
                 leadingIcon: Icons.password,
                 onTap: (){
                   updatePassAlert(context);
                 }
             ),
             CustomListTile(
-                title: 'Delete account',
+                title: AppLocalizations.of(context)!.delete_account_title,
                 leadingIcon: Icons.delete_forever,
                 iconColor: Colors.red,
                 onTap: (){

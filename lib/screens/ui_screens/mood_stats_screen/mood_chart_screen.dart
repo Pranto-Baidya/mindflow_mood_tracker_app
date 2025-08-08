@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/provider/data_provider/data_provider.dart';
 import 'package:provider/provider.dart';
-
+import '../../../l10n/app_localizations.dart'; // Updated import to match AddJournal
 import '../../../provider/theme_provider/theme_provider.dart';
 
 class MoodPieChartScreen extends StatelessWidget {
@@ -29,7 +29,7 @@ class MoodPieChartScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Mood Stats', style: theme.textTheme.headlineMedium),
+        title: Text(AppLocalizations.of(context)!.mood_stats_title, style: theme.textTheme.headlineMedium),
         iconTheme: theme.iconTheme,
         backgroundColor: Colors.transparent,
         systemOverlayStyle: SystemUiOverlayStyle(
@@ -42,7 +42,7 @@ class MoodPieChartScreen extends StatelessWidget {
           children: [
             SizedBox(height: 20.h),
             Text(
-              'Weekly mood distribution',
+              AppLocalizations.of(context)!.weekly_mood_distribution,
               style: theme.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: isDark ? Colors.white : Colors.black87,
@@ -60,7 +60,7 @@ class MoodPieChartScreen extends StatelessWidget {
             _buildLegend(context),
             SizedBox(height: 50.h),
             Text(
-              'Overall mood breakdown',
+              AppLocalizations.of(context)!.overall_mood_breakdown,
               style: theme.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: isDark ? Colors.white : Colors.black87,
@@ -84,9 +84,17 @@ class MoodPieChartScreen extends StatelessWidget {
   }
 
   Widget _buildWeeklyBarChart(BuildContext context) {
-
     final moodData = calculateDailyMood(context);
     final days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    final dayLabels = [
+      AppLocalizations.of(context)!.day_mon,
+      AppLocalizations.of(context)!.day_tue,
+      AppLocalizations.of(context)!.day_wed,
+      AppLocalizations.of(context)!.day_thu,
+      AppLocalizations.of(context)!.day_fri,
+      AppLocalizations.of(context)!.day_sat,
+      AppLocalizations.of(context)!.day_sun,
+    ];
     final isDark = context.watch<ThemeProvider>().currentTheme == ThemeMode.dark;
 
     return BarChart(
@@ -108,31 +116,31 @@ class MoodPieChartScreen extends StatelessWidget {
                 toY: veryHappyCount,
                 color: Colors.cyan,
                 width: 10.w,
-                  borderRadius: BorderRadius.circular(0)
+                borderRadius: BorderRadius.circular(0),
               ),
               BarChartRodData(
                 toY: happyCount,
                 color: Colors.green,
                 width: 10.w,
-                  borderRadius: BorderRadius.circular(0)
+                borderRadius: BorderRadius.circular(0),
               ),
               BarChartRodData(
                 toY: neutralCount,
                 color: Colors.yellow.shade800,
                 width: 10.w,
-                  borderRadius: BorderRadius.circular(0)
+                borderRadius: BorderRadius.circular(0),
               ),
               BarChartRodData(
                 toY: sadCount,
                 color: Color(0xFFFF6F61),
                 width: 10.w,
-                  borderRadius: BorderRadius.circular(0)
+                borderRadius: BorderRadius.circular(0),
               ),
               BarChartRodData(
                 toY: depressedCount,
                 color: Color(0xFF39546D),
                 width: 10.w,
-                borderRadius: BorderRadius.circular(0)
+                borderRadius: BorderRadius.circular(0),
               ),
             ],
             barsSpace: 2.w,
@@ -163,7 +171,7 @@ class MoodPieChartScreen extends StatelessWidget {
               getTitlesWidget: (value, _) => Padding(
                 padding: EdgeInsets.only(top: 8.h),
                 child: Text(
-                  days[value.toInt()],
+                  dayLabels[value.toInt()],
                   style: TextStyle(
                     color: isDark ? Colors.white70 : Colors.black54,
                     fontSize: 12.sp,
@@ -192,9 +200,15 @@ class MoodPieChartScreen extends StatelessWidget {
           enabled: true,
           touchTooltipData: BarTouchTooltipData(
             getTooltipItem: (group, groupIdx, rod, rodIdx) {
-              final moods = ['Very happy', 'Happy', 'Neutral', 'Sad', 'Depressed'];
+              final moodLabels = [
+                AppLocalizations.of(context)!.mood_very_happy,
+                AppLocalizations.of(context)!.mood_happy,
+                AppLocalizations.of(context)!.mood_neutral,
+                AppLocalizations.of(context)!.mood_sad,
+                AppLocalizations.of(context)!.mood_depressed,
+              ];
               return BarTooltipItem(
-                '${moods[rodIdx]}: ${rod.toY.toInt()}',
+                '${moodLabels[rodIdx]}: ${rod.toY.toInt()}',
                 TextStyle(
                   color: isDark ? Colors.white : Colors.black87,
                   fontSize: 12.sp,
@@ -215,11 +229,11 @@ class MoodPieChartScreen extends StatelessWidget {
       spacing: 16.w,
       runSpacing: 8.h,
       children: [
-        _legendItem(context, 'Very happy', Colors.cyan),
-        _legendItem(context, 'Happy', Colors.green),
-        _legendItem(context, 'Neutral', Colors.yellow.shade800),
-        _legendItem(context, 'Sad', Color(0xFFFF6F61)),
-        _legendItem(context, 'Depressed', Color(0xFF39546D)),
+        _legendItem(context, AppLocalizations.of(context)!.mood_very_happy, Colors.cyan),
+        _legendItem(context, AppLocalizations.of(context)!.mood_happy, Colors.green),
+        _legendItem(context, AppLocalizations.of(context)!.mood_neutral, Colors.yellow.shade800),
+        _legendItem(context, AppLocalizations.of(context)!.mood_sad, Color(0xFFFF6F61)),
+        _legendItem(context, AppLocalizations.of(context)!.mood_depressed, Color(0xFF39546D)),
       ],
     );
   }
@@ -250,7 +264,6 @@ class MoodPieChartScreen extends StatelessWidget {
   }
 
   Map<String, Map<String,int>> calculateDailyMood(BuildContext context) {
-
     List<dynamic> journalList = context.read<DataProvider>().journals;
 
     final now = DateTime.now();
@@ -305,7 +318,7 @@ class MoodPieChart extends StatelessWidget {
     if (total == 0) {
       return Center(
         child: Text(
-          'Not enough data to show in the pie chart',
+          AppLocalizations.of(context)!.no_data_pie_chart,
           style: theme.textTheme.titleMedium,
         ),
       );

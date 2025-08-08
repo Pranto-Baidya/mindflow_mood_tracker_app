@@ -1,4 +1,3 @@
-
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -11,7 +10,7 @@ import 'package:mindflow_mood_tracker_app_with_firebase/provider/preferences_pro
 import 'package:mindflow_mood_tracker_app_with_firebase/widgets/app_loader/app_loader.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/widgets/app_toastMsg/app_toastMsg.dart';
 import 'package:provider/provider.dart';
-
+import '../../../l10n/app_localizations.dart'; // Updated import to match AddJournal
 import '../../../provider/theme_provider/theme_provider.dart';
 
 class EditJournal extends StatefulWidget {
@@ -30,7 +29,7 @@ class _EditJournalState extends State<EditJournal> {
   final GlobalKey<FormState> _key = GlobalKey<FormState>();
 
   List<String> defaultTags = ['Work', 'Family', 'Health', 'Sleep', 'Friends', 'Study', 'Exercise', 'Diet'];
-  
+
   Set<String> selectedTags = {};
 
   String selectedMood = '';
@@ -56,7 +55,6 @@ class _EditJournalState extends State<EditJournal> {
       });
     }
   }
-
 
   @override
   void initState() {
@@ -102,7 +100,6 @@ class _EditJournalState extends State<EditJournal> {
     );
   }
 
-
   Widget _buildText(String tag,BuildContext context){
     return Text(tag,style: Theme.of(context).textTheme.titleSmall,);
   }
@@ -145,14 +142,14 @@ class _EditJournalState extends State<EditJournal> {
         ),
         SizedBox(height: 10.h,),
         if(selectedMood==mood)
-        _buildText(mood, context)
+          _buildText(mood, context)
       ],
     );
   }
 
   Future<void> pickDateAndTime()async{
     DateTime? pickedDate = await showDatePicker(
-        context: context,
+      context: context,
       initialDate: selectedDate,
       firstDate: DateTime(2020),
       lastDate: DateTime.now(),
@@ -183,14 +180,14 @@ class _EditJournalState extends State<EditJournal> {
     var theme = Theme.of(context);
     final prefs = context.read<PreferencesProvider>();
     return Scaffold(
-     appBar: AppBar(
-       title: Text('Edit mood journal',style: theme.textTheme.headlineMedium,),
-       iconTheme: theme.iconTheme,
-       backgroundColor: Colors.transparent,
-       systemOverlayStyle: SystemUiOverlayStyle(
-           statusBarBrightness: context.watch<ThemeProvider>().currentTheme==ThemeMode.dark? Brightness.light:Brightness.light
-       ),
-     ),
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.edit_mood_journal_title,style: theme.textTheme.headlineMedium,),
+        iconTheme: theme.iconTheme,
+        backgroundColor: Colors.transparent,
+        systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarBrightness: context.watch<ThemeProvider>().currentTheme==ThemeMode.dark? Brightness.light:Brightness.light
+        ),
+      ),
       body: Form(
         key: _key,
         child: Padding(
@@ -213,10 +210,10 @@ class _EditJournalState extends State<EditJournal> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       SizedBox(height: 10.h,),
-                      Text('Date : ${DateFormat('d/M/y, h:mm a').format(combinedDateTime)}',style: theme.textTheme.titleMedium,),
+                      Text('${AppLocalizations.of(context)!.date_label} : ${DateFormat('d/M/y, h:mm a').format(combinedDateTime)}',style: theme.textTheme.titleMedium,),
                       TextButton(
-                        onPressed : pickDateAndTime,
-                          child: Text('Edit existing date and time',style: theme.textTheme.titleMedium?.copyWith(color: theme.colorScheme.primary),)
+                          onPressed : pickDateAndTime,
+                          child: Text(AppLocalizations.of(context)!.edit_date_time_button,style: theme.textTheme.titleMedium?.copyWith(color: theme.colorScheme.primary),)
                       ),
                     ],
                   ),
@@ -232,12 +229,12 @@ class _EditJournalState extends State<EditJournal> {
                   child: Column(
                     children: [
                       SizedBox(height: 20.h,),
-                      Text('Select your mood',style: theme.textTheme.titleMedium,),
+                      Text(AppLocalizations.of(context)!.select_mood_label,style: theme.textTheme.titleMedium,),
                       SizedBox(height: 15.h,),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                         _buildMood('Very happy', Icons.sentiment_very_satisfied_sharp),
+                          _buildMood('Very happy', Icons.sentiment_very_satisfied_sharp),
                           _buildMood("Happy", Icons.sentiment_satisfied_sharp,),
                           _buildMood("Neutral", Icons.sentiment_neutral,),
                           _buildMood("Sad", Icons.sentiment_dissatisfied),
@@ -253,18 +250,18 @@ class _EditJournalState extends State<EditJournal> {
                   maxLines: 5,
                   validator: (value){
                     if(value==null || value.isEmpty){
-                      return 'Please write updates about your mood';
+                      return AppLocalizations.of(context)!.content_empty_error;
                     }
                     return null;
                   },
                   decoration: InputDecoration(
                     hintFadeDuration: Duration(seconds: 5),
-                    hintText: 'write an update',
+                    hintText: AppLocalizations.of(context)!.content_hint,
                     hintStyle: theme.textTheme.titleMedium?.copyWith(color: Colors.grey,fontWeight: FontWeight.w400),
                   ),
                 ),
                 SizedBox(height: 20.h,),
-                Text('Update tags',style:theme.textTheme.titleMedium,),
+                Text(AppLocalizations.of(context)!.update_tags_label,style:theme.textTheme.titleMedium,),
                 SizedBox(height: 20.h,),
                 Wrap(
                   alignment: WrapAlignment.start,
@@ -308,7 +305,7 @@ class _EditJournalState extends State<EditJournal> {
                       if(_key.currentState!.validate()){
                         await editJournal();
                         Navigator.pop(context);
-                        ToastMsg.successToast('Journal updated successfully');
+                        ToastMsg.successToast(AppLocalizations.of(context)!.journal_updated_toast);
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -319,7 +316,7 @@ class _EditJournalState extends State<EditJournal> {
                           borderRadius: BorderRadius.circular(30.r),
                         )
                     ),
-                    child: context.watch<DataProvider>().isLoading?AppLoader.lightThemeLoader():Text('Save changes',style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500,color: Colors.white),)
+                    child: context.watch<DataProvider>().isLoading?AppLoader.lightThemeLoader():Text(AppLocalizations.of(context)!.save_changes_button,style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500,color: Colors.white),)
                 ):ElevatedButton(
                     onPressed: null,
                     style: ElevatedButton.styleFrom(
@@ -330,7 +327,7 @@ class _EditJournalState extends State<EditJournal> {
                           borderRadius: BorderRadius.circular(30.r),
                         )
                     ),
-                    child: Text('Save changes',style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500,color: Colors.grey),)
+                    child: Text(AppLocalizations.of(context)!.save_changes_button,style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500,color: Colors.grey),)
                 )
 
               ],

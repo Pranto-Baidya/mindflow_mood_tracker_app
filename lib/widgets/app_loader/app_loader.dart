@@ -35,4 +35,18 @@ class AppLoader{
     );
   }
 
+  static Widget lightThemeLoaderPrimarySmall(){
+    return LoadingAnimationWidget.staggeredDotsWave(
+        color: MoodTrackerColors.lightPrimary,
+        size: 30.sp
+    );
+  }
+
+  static Widget darkThemeLoaderPrimarySmall(){
+    return LoadingAnimationWidget.staggeredDotsWave(
+        color: MoodTrackerColors.darkPrimary,
+        size: 30.sp
+    );
+  }
+
 }

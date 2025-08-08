@@ -7,6 +7,8 @@ import 'package:mindflow_mood_tracker_app_with_firebase/widgets/app_toastMsg/app
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 
+import '../../../l10n/app_localizations.dart';
+
 class PinLockScreen extends StatefulWidget {
   const PinLockScreen({super.key});
 
@@ -28,6 +30,7 @@ class _PinLockScreenState extends State<PinLockScreen> {
   @override
   void dispose() {
     _pinController.dispose();
+    _pinController.removeListener(checkTextField);
     super.dispose();
   }
 
@@ -42,11 +45,11 @@ class _PinLockScreenState extends State<PinLockScreen> {
 
   @override
   Widget build(BuildContext context) {
-    
+
     final theme = Theme.of(context);
     final provider = context.watch<LocalAuthProvider>();
     final auth = context.read<LocalAuthProvider>();
-    
+
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
@@ -58,7 +61,7 @@ class _PinLockScreenState extends State<PinLockScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Enter your PIN', style: theme.textTheme.headlineSmall),
+              Text(AppLocalizations.of(context)!.enter_pin_title, style: theme.textTheme.headlineSmall),
               SizedBox(height: 50.h),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 40.w),
@@ -104,7 +107,7 @@ class _PinLockScreenState extends State<PinLockScreen> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
-                        'Unlock',
+                        AppLocalizations.of(context)!.unlock_button,
                         style: theme.textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.w500,
                           color: theme.colorScheme.primary,
@@ -119,7 +122,7 @@ class _PinLockScreenState extends State<PinLockScreen> {
                             final inputPin = _pinController.text.trim();
 
                             if (inputPin.length != 4) {
-                              ToastMsg.errorToast("Enter a 4-digit PIN");
+                              ToastMsg.errorToast(AppLocalizations.of(context)!.invalid_pin_error);
                               return;
                             }
 
@@ -142,12 +145,12 @@ class _PinLockScreenState extends State<PinLockScreen> {
               SizedBox(height: 50.h,),
               TextButton(
                   onPressed: ()async{
-                   await auth.authenticateUser();
-                   if(auth.isAuthenticated){
-                     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>AllMoodJournals()));
-                   }
-                  }, 
-                  child: Text('Use fingerprint instead?',style: theme.textTheme.titleLarge?.copyWith(color: theme.colorScheme.primary,fontWeight: FontWeight.w500),)
+                    await auth.authenticateUser();
+                    if(auth.isAuthenticated){
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>AllMoodJournals()));
+                    }
+                  },
+                  child: Text(AppLocalizations.of(context)!.use_fingerprint_prompt,style: theme.textTheme.titleLarge?.copyWith(color: theme.colorScheme.primary,fontWeight: FontWeight.w500),)
               )
             ],
           ),
@@ -156,4 +159,3 @@ class _PinLockScreenState extends State<PinLockScreen> {
     );
   }
 }
-

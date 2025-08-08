@@ -14,6 +14,10 @@ class PreferencesProvider extends ChangeNotifier {
   List<String> _historyList = [];
   List<String> get historyList => _historyList;
 
+  bool _isNotificationEnabled = false;
+
+  bool get isNotificationEnabled => _isNotificationEnabled;
+
   bool _isAuthEnabled = false;
 
   bool get isAuthEnabled => _isAuthEnabled;
@@ -32,11 +36,13 @@ class PreferencesProvider extends ChangeNotifier {
       loadTags();
       loadLocalAuth();
       loadSearchHistory();
+      loadNotification();
     } else {
       _customTags = {};
       _bio = null;
       _isAuthEnabled = false;
       _historyList = [];
+      _isNotificationEnabled = false;
       notifyListeners();
     }
   }
@@ -45,6 +51,7 @@ class PreferencesProvider extends ChangeNotifier {
   String get _tagKey => '${user!.uid}_tags';
   String get _authKey => '${user!.uid}_auth';
   String get _historyKey => '${user!.uid}_history';
+  String get _notificationKey => '${user!.uid}_notification';
 
   Future<void> saveUserBio(String bio) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -167,6 +174,24 @@ class PreferencesProvider extends ChangeNotifier {
       await preferences.remove(_historyKey);
       _historyList = [];
       await preferences.setStringList(_historyKey, _historyList);
+      notifyListeners();
+    }
+  }
+
+  Future<void> setNotification(bool value)async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    if(user!=null) {
+      await preferences.setBool(_notificationKey, value);
+      _isNotificationEnabled = value;
+      notifyListeners();
+    }
+  }
+
+  Future<void> loadNotification()async{
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    if(user!=null) {
+      bool value = preferences.getBool(_notificationKey) ?? false;
+      _isNotificationEnabled = value;
       notifyListeners();
     }
   }

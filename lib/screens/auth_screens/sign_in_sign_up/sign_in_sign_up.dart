@@ -10,6 +10,7 @@ import 'package:mindflow_mood_tracker_app_with_firebase/widgets/app_toastMsg/app
 import 'package:mindflow_mood_tracker_app_with_firebase/widgets/status_bar_color/status%20bar%20color.dart';
 import 'package:provider/provider.dart';
 
+import '../../../l10n/app_localizations.dart';
 import '../../../provider/auth_provider/auth_provider.dart';
 import '../../../provider/preferences_provider/preferences_provider.dart';
 
@@ -86,13 +87,13 @@ class _SignInSignUpState extends State<SignInSignUp> {
     if (isSignIn) {
       hasValue =
           _emailController.text.isNotEmpty &&
-          _passwordController.text.isNotEmpty;
+              _passwordController.text.isNotEmpty;
     } else {
       hasValue =
           _nameController.text.isNotEmpty &&
-          _signUpEmailController.text.isNotEmpty &&
-          _signUpPasswordController.text.isNotEmpty &&
-          _confirmPassController.text.isNotEmpty;
+              _signUpEmailController.text.isNotEmpty &&
+              _signUpPasswordController.text.isNotEmpty &&
+              _confirmPassController.text.isNotEmpty;
     }
     if (hasValue != isTyping) {
       setState(() {
@@ -143,43 +144,43 @@ class _SignInSignUpState extends State<SignInSignUp> {
             children: [
               SizedBox(height: 80.h),
               isSignIn
-                  ? Text('Welcome back', style: theme.textTheme.displaySmall)
+                  ? Text(AppLocalizations.of(context)!.welcome_back, style: theme.textTheme.displaySmall)
                   : Text(
-                      'Create an account',
-                      style: theme.textTheme.displaySmall,
-                    ),
+                AppLocalizations.of(context)!.create_account,
+                style: theme.textTheme.displaySmall,
+              ),
               SizedBox(height: 20.h),
               isSignIn
                   ? Text(
-                      'Fill up the credentials below and get started',
-                      style: theme.textTheme.titleMedium,
-                    )
+                AppLocalizations.of(context)!.sign_in_description,
+                style: theme.textTheme.titleMedium,
+              )
                   : Text(
-                      'Fill up the credentials below and be a member today!',
-                      style: theme.textTheme.titleMedium,
-                    ),
+                AppLocalizations.of(context)!.sign_up_description,
+                style: theme.textTheme.titleMedium,
+              ),
               SizedBox(height: 20.h),
               toggleButton(theme),
               SizedBox(height: 20.h),
               isSignIn
                   ? Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 5.w),
-                      child: Text(
-                        'Sign In',
-                        style: theme.textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    )
+                padding: EdgeInsets.symmetric(horizontal: 5.w),
+                child: Text(
+                  AppLocalizations.of(context)!.sign_in,
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              )
                   : Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 5.w),
-                      child: Text(
-                        'Sign Up',
-                        style: theme.textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
+                padding: EdgeInsets.symmetric(horizontal: 5.w),
+                child: Text(
+                  AppLocalizations.of(context)!.sign_up,
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
               if (!isSignIn) ...[
                 Form(
                   key: _signUpFormKey,
@@ -193,12 +194,12 @@ class _SignInSignUpState extends State<SignInSignUp> {
                           cursorColor: theme.colorScheme.primary,
                           validator: (String? value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter your name';
+                              return AppLocalizations.of(context)!.name_empty_error;
                             }
                             return null;
                           },
                           decoration: InputDecoration(
-                            hintText: 'Name',
+                            hintText: AppLocalizations.of(context)!.name_hint,
                             hintStyle: theme.textTheme.titleMedium,
                             prefixIcon: Icon(
                               Icons.person_outline,
@@ -215,16 +216,16 @@ class _SignInSignUpState extends State<SignInSignUp> {
                           cursorColor: theme.colorScheme.primary,
                           validator: (String? value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter your email';
+                              return AppLocalizations.of(context)!.email_empty_error;
                             }
                             if (!value.contains('@') ||
                                 !value.contains('.com')) {
-                              return 'Please enter a valid email address';
+                              return AppLocalizations.of(context)!.email_invalid_error;
                             }
                             return null;
                           },
                           decoration: InputDecoration(
-                            hintText: 'Email',
+                            hintText: AppLocalizations.of(context)!.email_hint,
                             hintStyle: theme.textTheme.titleMedium,
                             prefixIcon: Icon(
                               Icons.email_outlined,
@@ -243,15 +244,15 @@ class _SignInSignUpState extends State<SignInSignUp> {
                           obscureText: showPassword ? false : true,
                           validator: (String? value) {
                             if (value == null || value.isEmpty) {
-                              return "Please enter your password";
+                              return AppLocalizations.of(context)!.password_empty_error;
                             }
                             if (value.length < 6) {
-                              return "Password must be at least 6 characters";
+                              return AppLocalizations.of(context)!.password_short_error;
                             }
                             return null;
                           },
                           decoration: InputDecoration(
-                            hintText: 'Password',
+                            hintText: AppLocalizations.of(context)!.password_hint,
                             hintStyle: theme.textTheme.titleMedium,
                             prefixIcon: Icon(
                               Icons.lock_outline,
@@ -282,15 +283,15 @@ class _SignInSignUpState extends State<SignInSignUp> {
                           obscureText: showConfirmPassword ? false : true,
                           validator: (String? value) {
                             if (value == null || value.isEmpty) {
-                              return "Please confirm your password";
+                              return AppLocalizations.of(context)!.confirm_password_empty_error;
                             }
                             if (value != _signUpPasswordController.text) {
-                              return "Passwords do not match";
+                              return AppLocalizations.of(context)!.passwords_not_match_error;
                             }
                             return null;
                           },
                           decoration: InputDecoration(
-                            hintText: 'Confirm password',
+                            hintText: AppLocalizations.of(context)!.confirm_password_hint,
                             hintStyle: theme.textTheme.titleMedium,
                             prefixIcon: Icon(
                               Icons.password,
@@ -328,16 +329,16 @@ class _SignInSignUpState extends State<SignInSignUp> {
                           cursorColor: theme.colorScheme.primary,
                           validator: (String? value) {
                             if (value == null || value.isEmpty) {
-                              return 'Please enter your email';
+                              return AppLocalizations.of(context)!.email_empty_error;
                             }
                             if (!value.contains('@') ||
                                 !value.contains('.com')) {
-                              return 'Please enter a valid email address';
+                              return AppLocalizations.of(context)!.email_invalid_error;
                             }
                             return null;
                           },
                           decoration: InputDecoration(
-                            hintText: 'Email',
+                            hintText: AppLocalizations.of(context)!.email_hint,
                             hintStyle: theme.textTheme.titleMedium,
                             prefixIcon: Icon(
                               Icons.email_outlined,
@@ -356,12 +357,12 @@ class _SignInSignUpState extends State<SignInSignUp> {
                           obscureText: showPassword ? false : true,
                           validator: (String? value) {
                             if (value == null || value.isEmpty) {
-                              return "Please enter your password";
+                              return AppLocalizations.of(context)!.password_empty_error;
                             }
                             return null;
                           },
                           decoration: InputDecoration(
-                            hintText: 'Password',
+                            hintText: AppLocalizations.of(context)!.password_hint,
                             hintStyle: theme.textTheme.titleMedium,
                             prefixIcon: Icon(
                               Icons.lock_outline,
@@ -399,7 +400,7 @@ class _SignInSignUpState extends State<SignInSignUp> {
                                     },
                                   ),
                                   Text(
-                                    'Remember me',
+                                    AppLocalizations.of(context)!.remember_me,
                                     style: theme.textTheme.titleMedium,
                                   ),
                                 ],
@@ -416,7 +417,7 @@ class _SignInSignUpState extends State<SignInSignUp> {
                               );
                             },
                             child: Text(
-                              'Forgot Password?',
+                              AppLocalizations.of(context)!.forgot_password,
                               style: theme.textTheme.titleMedium?.copyWith(
                                 color: theme.colorScheme.primary,
                                 fontWeight: FontWeight.bold,
@@ -437,61 +438,61 @@ class _SignInSignUpState extends State<SignInSignUp> {
                     return ElevatedButton(
                       onPressed: isTyping
                           ? () async {
-                              final currentFormKey = isSignIn ? _signInFormKey : _signUpFormKey;
-                              if (currentFormKey.currentState!.validate()) {
-                                if (isSignIn) {
-                                  bool remember = credentials.rememberMe;
-                                  bool success = await auth.signIn(
-                                    _emailController.text,
-                                    _passwordController.text,
-                                  );
+                        final currentFormKey = isSignIn ? _signInFormKey : _signUpFormKey;
+                        if (currentFormKey.currentState!.validate()) {
+                          if (isSignIn) {
+                            bool remember = credentials.rememberMe;
+                            bool success = await auth.signIn(
+                              _emailController.text,
+                              _passwordController.text,
+                            );
 
-                                  if (success) {
-                                    credentials.saveCredentials(
-                                      remember,
-                                      _emailController.text,
-                                      _passwordController.text,
-                                    );
-                                    final preferencesProvider = context.read<PreferencesProvider>();
-                                    final localAuthProvider = context.read<LocalAuthProvider>();
+                            if (success) {
+                              credentials.saveCredentials(
+                                remember,
+                                _emailController.text,
+                                _passwordController.text,
+                              );
+                              final preferencesProvider = context.read<PreferencesProvider>();
+                              final localAuthProvider = context.read<LocalAuthProvider>();
 
-                                    await preferencesProvider.loadLocalAuth();
-                                    await localAuthProvider.loadPin();
+                              await preferencesProvider.loadLocalAuth();
+                              await localAuthProvider.loadPin();
 
-                                    if (preferencesProvider.isAuthEnabled && localAuthProvider.isPinSet) {
-                                      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => PinLockScreen()),(Route<dynamic> route) => false);
-                                    } else {
-                                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => AllMoodJournals()));
-                                    }
-
-                                    ToastMsg.successToast('Login successful');
-                                  } else {
-                                    ToastMsg.errorToast(
-                                      auth.errorMsg ?? 'Login failed',
-                                    );
-                                  }
-                                } else {
-                                  bool success = await auth.signUp(
-                                    _signUpEmailController.text,
-                                    _signUpPasswordController.text,
-                                    _nameController.text
-                                  );
-                                  if (success) {
-                                    await Future.delayed(
-                                      Duration(milliseconds: 800),
-                                    );
-                                    toggleAuthState();
-                                    ToastMsg.successToast(
-                                      'Registration successful',
-                                    );
-                                  } else {
-                                    ToastMsg.errorToast(
-                                      auth.errorMsg ?? 'Signup failed',
-                                    );
-                                  }
-                                }
+                              if (preferencesProvider.isAuthEnabled && localAuthProvider.isPinSet) {
+                                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => PinLockScreen()),(Route<dynamic> route) => false);
+                              } else {
+                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => AllMoodJournals()));
                               }
+
+                              ToastMsg.successToast(AppLocalizations.of(context)!.login_success_toast);
+                            } else {
+                              ToastMsg.errorToast(
+                                auth.errorMsg ?? AppLocalizations.of(context)!.login_failed_toast,
+                              );
                             }
+                          } else {
+                            bool success = await auth.signUp(
+                                _signUpEmailController.text,
+                                _signUpPasswordController.text,
+                                _nameController.text
+                            );
+                            if (success) {
+                              await Future.delayed(
+                                Duration(milliseconds: 800),
+                              );
+                              toggleAuthState();
+                              ToastMsg.successToast(
+                                AppLocalizations.of(context)!.registration_success_toast,
+                              );
+                            } else {
+                              ToastMsg.errorToast(
+                                auth.errorMsg ?? AppLocalizations.of(context)!.signup_failed_toast,
+                              );
+                            }
+                          }
+                        }
+                      }
                           : null,
                       style: ElevatedButton.styleFrom(
                         elevation: 0,
@@ -504,12 +505,12 @@ class _SignInSignUpState extends State<SignInSignUp> {
                       child: auth.isLoading
                           ? AppLoader.lightThemeLoader()
                           : Text(
-                              isSignIn ? 'Login' : 'Register',
-                              style: theme.textTheme.titleLarge?.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
+                        isSignIn ? AppLocalizations.of(context)!.login_button : AppLocalizations.of(context)!.register_button,
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     );
                   },
                 ),
@@ -518,7 +519,7 @@ class _SignInSignUpState extends State<SignInSignUp> {
               if (isSignIn) ...[
                 Center(
                   child: Text(
-                    'Or, Sign in with',
+                    AppLocalizations.of(context)!.or_sign_in_with,
                     style: theme.textTheme.titleMedium,
                   ),
                 ),
@@ -533,30 +534,30 @@ class _SignInSignUpState extends State<SignInSignUp> {
                           onPressed: auth.isLoading
                               ? null
                               : () async {
-                                  final user = await auth.signInWithGoogle();
-                                  if (user != null) {
-                                    final preferencesProvider = context.read<PreferencesProvider>();
-                                    final localAuthProvider = context.read<LocalAuthProvider>();
+                            final user = await auth.signInWithGoogle();
+                            if (user != null) {
+                              final preferencesProvider = context.read<PreferencesProvider>();
+                              final localAuthProvider = context.read<LocalAuthProvider>();
 
-                                    await preferencesProvider.loadLocalAuth();
-                                    await localAuthProvider.loadPin();
+                              await preferencesProvider.loadLocalAuth();
+                              await localAuthProvider.loadPin();
 
-                                    if (preferencesProvider.isAuthEnabled && localAuthProvider.isPinSet) {
-                                      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => PinLockScreen()),(Route<dynamic> route) => false);
-                                    } else {
-                                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => AllMoodJournals()));
-                                    }
+                              if (preferencesProvider.isAuthEnabled && localAuthProvider.isPinSet) {
+                                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => PinLockScreen()),(Route<dynamic> route) => false);
+                              } else {
+                                Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => AllMoodJournals()));
+                              }
 
-                                    ToastMsg.successToast(
-                                      'Signed in with Google',
-                                    );
-                                  } else {
-                                    ToastMsg.errorToast(
-                                      auth.errorMsg ??
-                                          'Sign in aborted by user',
-                                    );
-                                  }
-                                },
+                              ToastMsg.successToast(
+                                AppLocalizations.of(context)!.google_sign_in_success_toast,
+                              );
+                            } else {
+                              ToastMsg.errorToast(
+                                auth.errorMsg ??
+                                    AppLocalizations.of(context)!.google_sign_in_failed_toast,
+                              );
+                            }
+                          },
                           style: ElevatedButton.styleFrom(
                             elevation: 0,
                             minimumSize: Size(double.infinity, 50.h),
@@ -566,22 +567,22 @@ class _SignInSignUpState extends State<SignInSignUp> {
                           child: auth.isLoading
                               ? AppLoader.lightThemeLoader()
                               : Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.asset(
-                                      'assets/google.png',
-                                      width: 25.w,
-                                      height: 25.h,
-                                    ),
-                                    SizedBox(width: 10.w),
-                                    Text(
-                                      'Continue with Google',
-                                      style: TextStyle(
-                                        color: Color(0xFF333333),
-                                      ),
-                                    ),
-                                  ],
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                'assets/google.png',
+                                width: 25.w,
+                                height: 25.h,
+                              ),
+                              SizedBox(width: 10.w),
+                              Text(
+                                AppLocalizations.of(context)!.continue_with_google,
+                                style: TextStyle(
+                                  color: Color(0xFF333333),
                                 ),
+                              ),
+                            ],
+                          ),
                         ),
                       );
                     },
@@ -594,13 +595,13 @@ class _SignInSignUpState extends State<SignInSignUp> {
                 children: [
                   isSignIn
                       ? Text(
-                          "Don't have an account?",
-                          style: theme.textTheme.titleSmall,
-                        )
+                    AppLocalizations.of(context)!.no_account_prompt,
+                    style: theme.textTheme.titleSmall,
+                  )
                       : Text(
-                          "Already have an account?",
-                          style: theme.textTheme.titleSmall,
-                        ),
+                    AppLocalizations.of(context)!.have_account_prompt,
+                    style: theme.textTheme.titleSmall,
+                  ),
                   SizedBox(width: 5.w),
                   GestureDetector(
                     onTap: () async {
@@ -608,7 +609,7 @@ class _SignInSignUpState extends State<SignInSignUp> {
                       toggleAuthState();
                     },
                     child: Text(
-                      isSignIn ? "Sign up" : "Sign In",
+                      isSignIn ? AppLocalizations.of(context)!.sign_up : AppLocalizations.of(context)!.sign_in_button,
                       style: theme.textTheme.titleMedium?.copyWith(
                         color: theme.colorScheme.primary,
                         fontWeight: FontWeight.bold,
@@ -653,14 +654,14 @@ class _SignInSignUpState extends State<SignInSignUp> {
                 ),
                 alignment: Alignment.center,
                 child: Text(
-                  "Sign in",
+                  AppLocalizations.of(context)!.sign_in,
                   style: isSignIn
                       ? theme.textTheme.titleMedium?.copyWith(
-                          color: Colors.white,
-                        )
+                    color: Colors.white,
+                  )
                       : theme.textTheme.titleMedium?.copyWith(
-                          color: Color(0xFF333333),
-                        ),
+                    color: Color(0xFF333333),
+                  ),
                 ),
               ),
             ),
@@ -682,14 +683,14 @@ class _SignInSignUpState extends State<SignInSignUp> {
                 ),
                 alignment: Alignment.center,
                 child: Text(
-                  "Sign up",
+                  AppLocalizations.of(context)!.sign_up,
                   style: !isSignIn
                       ? theme.textTheme.titleMedium?.copyWith(
-                          color: Colors.white,
-                        )
+                    color: Colors.white,
+                  )
                       : theme.textTheme.titleMedium?.copyWith(
-                          color: Color(0xFF333333),
-                        ),
+                    color: Color(0xFF333333),
+                  ),
                 ),
               ),
             ),
