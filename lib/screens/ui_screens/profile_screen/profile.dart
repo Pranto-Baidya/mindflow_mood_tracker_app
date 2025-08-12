@@ -6,10 +6,12 @@ import 'package:mindflow_mood_tracker_app_with_firebase/provider/locale_provider
 import 'package:mindflow_mood_tracker_app_with_firebase/provider/preferences_provider/preferences_provider.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/provider/theme_provider/theme_provider.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/screens/auth_screens/sign_in_sign_up/sign_in_sign_up.dart';
+import 'package:mindflow_mood_tracker_app_with_firebase/screens/ui_screens/reminder_screen/reminder_screen.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/widgets/app_loader/app_loader.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/widgets/app_toastMsg/app_toastMsg.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/widgets/custom_listile/custom_listTile.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../notification_service/local_notification.dart';
 import '../../../provider/auth_provider/auth_provider.dart';
@@ -53,10 +55,24 @@ class _ProfileState extends State<Profile> {
     });
   }
 
+  bool isGoogleUser(User? user){
+    return user?.providerData.any((info)=>info.providerId=='google.com') ?? false;
+  }
+
   @override
   void didChangeDependencies() {
     _bioController.text = context.watch<PreferencesProvider>().bio??'';
     super.didChangeDependencies();
+  }
+
+  Future<void> changePasswordForGoogleUser()async{
+    Uri url = Uri.parse('https://myaccount.google.com/security');
+    if(await canLaunchUrl(url)){
+      await launchUrl(url);
+    }
+    else{
+      throw Exception('Failed to redirect');
+    }
   }
 
   void changeTheme(BuildContext context){
@@ -384,7 +400,8 @@ class _ProfileState extends State<Profile> {
         iconTheme: theme.iconTheme,
         backgroundColor: Colors.transparent,
         systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarBrightness: isDark ? Brightness.light : Brightness.light,
+          statusBarColor: Colors.transparent,
+          statusBarBrightness: isDark ? Brightness.light : Brightness.dark,
         ),
       ),
       body: SingleChildScrollView(
@@ -578,6 +595,23 @@ class _ProfileState extends State<Profile> {
               children: [
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
+                  child: Text(AppLocalizations.of(context)!.reminder,style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500)),
+                ),
+              ],
+            ),
+            SizedBox(height: 10.h,),
+            CustomListTile(
+                title: AppLocalizations.of(context)!.schedule_reminder,
+                leadingIcon: Icons.alarm,
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>ReminderScreen()));
+                }
+            ),
+            SizedBox(height: 10.h,),
+            Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.w),
                   child: Text(AppLocalizations.of(context)!.security_section,style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500)),
                 ),
               ],
@@ -658,8 +692,13 @@ class _ProfileState extends State<Profile> {
             CustomListTile(
                 title: AppLocalizations.of(context)!.change_password_title,
                 leadingIcon: Icons.password,
-                onTap: (){
-                  updatePassAlert(context);
+                onTap: ()async{
+                  if(isGoogleUser(user)){
+                    await changePasswordForGoogleUser();
+                  }
+                  else {
+                    updatePassAlert(context);
+                  }
                 }
             ),
             CustomListTile(

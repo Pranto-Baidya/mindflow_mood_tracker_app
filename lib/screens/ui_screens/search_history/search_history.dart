@@ -68,7 +68,8 @@ class _SearchHistoryState extends State<SearchHistory> {
           backgroundColor: Colors.transparent,
 
           systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarBrightness: isDark ? Brightness.light : Brightness.light,
+            statusBarColor: Colors.transparent,
+            statusBarBrightness: isDark ? Brightness.light : Brightness.dark,
           ),
           actions: [
             Padding(

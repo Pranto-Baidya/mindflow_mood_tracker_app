@@ -141,24 +141,43 @@ class AuthProvider extends ChangeNotifier{
 
   }
 
-  Future<bool> reauthenticateAndDeleteAccount({required String email, required String password})async{
-    try{
+  Future<bool> reauthenticateAndDeleteAccount({String? email, String? password}) async {
+    try {
       _isLoading = true;
       notifyListeners();
 
-      final credential = EmailAuthProvider.credential(email: email, password: password);
-      await _auth.currentUser?.reauthenticateWithCredential(credential);
-      await _auth.currentUser?.delete();
+      final user = _auth.currentUser;
+      if (user == null) return false;
+
+      final isGoogleUser = user.providerData.any((info) => info.providerId == 'google.com');
+
+      if (isGoogleUser) {
+        final googleUser = await GoogleSignIn().signIn();
+        if (googleUser == null) throw Exception("Google sign-in aborted");
+
+        final googleAuth = await googleUser.authentication;
+        final credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
+
+        await user.reauthenticateWithCredential(credential);
+      } else {
+        if (email == null || password == null) throw Exception("Missing credentials");
+        final credential = EmailAuthProvider.credential(email: email, password: password);
+        await user.reauthenticateWithCredential(credential);
+      }
+
+      await user.delete();
       return true;
-    }
-    on FirebaseAuthException catch(e){
+    } on FirebaseAuthException catch (e) {
       _errorMsg = e.message;
       return false;
-    }
-    finally{
+    } finally {
       _isLoading = false;
       notifyListeners();
     }
   }
+
 
 }

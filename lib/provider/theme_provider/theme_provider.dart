@@ -6,7 +6,7 @@ enum AppThemeMode {light,dark,system}
 
 class ThemeProvider extends ChangeNotifier{
 
-  AppThemeMode _mode = AppThemeMode.system;
+  AppThemeMode _mode = AppThemeMode.light;
   AppThemeMode get mode => _mode;
 
   ThemeProvider(){

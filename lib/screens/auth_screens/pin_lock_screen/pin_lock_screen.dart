@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/provider/local_auth_provider/local_auth_provider.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/screens/ui_screens/home/all_mood_journal_screen.dart';
@@ -8,6 +9,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:provider/provider.dart';
 
 import '../../../l10n/app_localizations.dart';
+import '../../../provider/theme_provider/theme_provider.dart';
 
 class PinLockScreen extends StatefulWidget {
   const PinLockScreen({super.key});
@@ -49,11 +51,20 @@ class _PinLockScreenState extends State<PinLockScreen> {
     final theme = Theme.of(context);
     final provider = context.watch<LocalAuthProvider>();
     final auth = context.read<LocalAuthProvider>();
-
+    bool isDark = theme.brightness == Brightness.dark;
+    
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarBrightness: isDark? Brightness.light : Brightness.dark,
+          statusBarColor: Colors.transparent,
+          systemNavigationBarColor:
+          context.watch<ThemeProvider>().currentTheme == ThemeMode.dark
+              ? const Color(0xFF1C2526)
+              : const Color(0xFFF5F7FA),
+        ),
       ),
       body: Center(
         child: Padding(

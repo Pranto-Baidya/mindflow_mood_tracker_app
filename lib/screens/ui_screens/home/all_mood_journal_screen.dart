@@ -14,6 +14,7 @@ import 'package:mindflow_mood_tracker_app_with_firebase/screens/ui_screens/add_j
 import 'package:mindflow_mood_tracker_app_with_firebase/screens/ui_screens/edit_journal/edit_journal.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/screens/ui_screens/mood_stats_screen/mood_chart_screen.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/screens/ui_screens/profile_screen/profile.dart';
+import 'package:mindflow_mood_tracker_app_with_firebase/screens/ui_screens/quote_screens/all_quotes.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/screens/ui_screens/search_history/search_history.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/widgets/animated_container/animated_container_widget.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/widgets/app_loader/app_loader.dart';
@@ -21,7 +22,8 @@ import 'package:mindflow_mood_tracker_app_with_firebase/widgets/app_toastMsg/app
 import 'package:mindflow_mood_tracker_app_with_firebase/widgets/custom_listile/custom_listTile.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../../l10n/app_localizations.dart'; // Added import to match AddJournal
+import '../../../l10n/app_localizations.dart';
+import '../../../widgets/custom_drawer_listTile/drawer_ListTile.dart'; // Added import to match AddJournal
 
 class AllMoodJournals extends StatefulWidget {
   const AllMoodJournals({super.key});
@@ -302,7 +304,8 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
           ],
         ),
         systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarBrightness: isDark? Brightness.light:Brightness.light
+            statusBarColor: Colors.transparent,
+            statusBarBrightness: isDark? Brightness.light:Brightness.dark
         ),
         backgroundColor: Colors.transparent,
         actions: [
@@ -465,19 +468,18 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
                                 : AppLoader.lightThemeLoaderPrimary(),
                           )
                               : journalList.isEmpty
-                              ? Center(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                SizedBox(height: 100.h,),
-                                isDark? Lottie.asset('assets/sad_dark.json',fit: BoxFit.cover,width: 500.w,height: 180.h)
-                                    :Lottie.asset('assets/sad_light.json',fit: BoxFit.cover,width: 500.w,height: 180.h),
-                                SizedBox(height: 10.h,),
-                                Center(
-                                    child: isSearching?Text(AppLocalizations.of(context)!.no_mood_journals_found,style: theme.textTheme.titleMedium,) :Text(AppLocalizations.of(context)!.no_mood_journals_prompt,style: theme.textTheme.titleMedium,)),
-                              ],
-                            ),
-                          )
+                              ? SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    SizedBox(height: 100.h,),
+                                    isDark? Lottie.asset('assets/sad_dark.json',fit: BoxFit.cover,width: 500.w,height: 180.h)
+                                        :Lottie.asset('assets/sad_light.json',fit: BoxFit.cover,width: 500.w,height: 180.h),
+                                    SizedBox(height: 10.h,),
+                                    Center(
+                                        child: isSearching?Text(AppLocalizations.of(context)!.no_mood_journals_found,style: theme.textTheme.titleMedium,) :Text(AppLocalizations.of(context)!.no_mood_journals_prompt,style: theme.textTheme.titleMedium,)),
+                                  ],
+                                ),
+                              )
                               : ListView.builder(
                             physics: BouncingScrollPhysics(),
                             itemCount: journalList.length,
@@ -602,7 +604,7 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
                                             children: [
                                               SizedBox(height: 20.h,),
                                               Text(
-                                                '${AppLocalizations.of(context)!.date_label} :    ${DateFormat('d/M/y').format(result.date)}, ${result.time.format(context)}',
+                                                '${AppLocalizations.of(context)!.date_label} :   ${DateFormat('d/M/y').format(result.date)}, ${result.time.format(context)}',
                                                 style:
                                                 theme.textTheme.titleMedium,
                                               ),
@@ -645,20 +647,20 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
                   }
                   else{
                     return Center(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(height: 150.h,),
-                          isDark? Lottie.asset('assets/internet_dark.json', width: 150.w, height: 150.h):Lottie.asset('assets/internet_light.json', width: 150.w, height: 150.h),
-                          SizedBox(height: 20.h),
-                          Padding(
-                            padding:  EdgeInsets.symmetric(horizontal: 20.w),
-                            child: Text(
-                              AppLocalizations.of(context)!.no_internet_message, style: theme.textTheme.titleLarge,
-                            ),
-                          )
-                        ],
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            SizedBox(height: 150.h,),
+                            isDark? Lottie.asset('assets/internet_dark.json', width: 150.w, height: 150.h):Lottie.asset('assets/internet_light.json', width: 150.w, height: 150.h),
+                            SizedBox(height: 20.h),
+                            Padding(
+                              padding:  EdgeInsets.symmetric(horizontal: 20.w),
+                              child: Text(
+                                AppLocalizations.of(context)!.no_internet_message, style: theme.textTheme.titleLarge,
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     );
                   }
@@ -700,7 +702,7 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
             AnimatedMoodContainerWidget(
                 index: 1,
                 offset: Offset(0, 0.2),
-                child: CustomListTile(
+                child: DrawerListTile(
                     leadingIcon: Icons.show_chart,
                     title: AppLocalizations.of(context)!.view_mood_stats,
                     onTap:(){
@@ -711,7 +713,18 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
             AnimatedMoodContainerWidget(
                 index: 2,
                 offset: Offset(0, 0.2),
-                child: CustomListTile(
+                child: DrawerListTile(
+                    leadingIcon: Icons.local_fire_department_outlined,
+                    title: AppLocalizations.of(context)!.motivate_yourself,
+                    onTap:(){
+                     Navigator.push(context, MaterialPageRoute(builder: (context)=>QuotesScreen()));
+                    }
+                )
+            ),
+            AnimatedMoodContainerWidget(
+                index: 3,
+                offset: Offset(0, 0.2),
+                child: DrawerListTile(
                     leadingIcon: Icons.history,
                     title: AppLocalizations.of(context)!.history,
                     onTap:(){
@@ -720,9 +733,9 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
                 )
             ),
             AnimatedMoodContainerWidget(
-                index: 3,
+                index: 4,
                 offset: Offset(0, 0.2),
-                child: CustomListTile(
+                child: DrawerListTile(
                     leadingIcon: Icons.bug_report_outlined,
                     title: AppLocalizations.of(context)!.report_bug,
                     onTap:()async{
@@ -731,9 +744,9 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
                 )
             ),
             AnimatedMoodContainerWidget(
-                index: 4,
+                index: 5,
                 offset: Offset(0, 0.2),
-                child: CustomListTile(
+                child: DrawerListTile(
                     leadingIcon: Icons.info_outline,
                     title: AppLocalizations.of(context)!.about_dev,
                     onTap:()async{
@@ -742,9 +755,9 @@ class _AllMoodJournalsState extends State<AllMoodJournals> {
                 )
             ),
             AnimatedMoodContainerWidget(
-                index: 5,
+                index: 6,
                 offset: Offset(0, 0.2),
-                child: CustomListTile(
+                child: DrawerListTile(
                     leadingIcon: Icons.power_settings_new_outlined,
                     title: AppLocalizations.of(context)!.exit_app,
                     onTap:(){

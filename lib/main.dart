@@ -12,7 +12,9 @@ import 'package:mindflow_mood_tracker_app_with_firebase/provider/data_provider/d
 import 'package:mindflow_mood_tracker_app_with_firebase/provider/internet_connection_provider/internet_provider.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/provider/local_auth_provider/local_auth_provider.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/provider/locale_provider/locale_provider.dart';
+import 'package:mindflow_mood_tracker_app_with_firebase/provider/onboarding_provider/onboarding_provider.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/provider/preferences_provider/preferences_provider.dart';
+import 'package:mindflow_mood_tracker_app_with_firebase/provider/quotes_provider/quotes_provider.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/provider/theme_provider/theme_provider.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/screens/auth_screens/check_user/check_user.dart';
 import 'package:mindflow_mood_tracker_app_with_firebase/screens/ui_screens/home/all_mood_journal_screen.dart';
@@ -45,7 +47,9 @@ void main()async{
            ChangeNotifierProvider(create: (_)=>CredentialsProvider()),
            ChangeNotifierProvider(create: (_)=>PreferencesProvider()),
            ChangeNotifierProvider(create: (_)=>LocalAuthProvider()),
-           ChangeNotifierProvider(create: (_)=>LocaleProvider())
+           ChangeNotifierProvider(create: (_)=>LocaleProvider()),
+           ChangeNotifierProvider(create: (_)=>OnBoardingProvider()),
+           ChangeNotifierProvider(create: (_)=>QuoteProvider())
          ],
        child:  const MyApp(),
      )

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/data/latest.dart' as tz;
@@ -56,7 +57,7 @@ class NotificationService {
       now.month,
       now.day,
       21,
-      37,
+      59,
     );
     await _notificationService.zonedSchedule(
       1,
@@ -69,6 +70,34 @@ class NotificationService {
     );
 
     print('Notification scheduled at: $scheduleDate');
+  }
+
+  static Future<void> setReminderNotification(
+      { required int id,
+        required  String title,
+        required String description,
+        required DateTime date,
+        required TimeOfDay time
+      }) async{
+    var scheduleDate = tz.TZDateTime(
+      tz.local,
+      date.year,
+      date.month,
+      date.day,
+      time.hour,
+      time.minute,
+    );
+
+    await _notificationService.zonedSchedule(
+        id,
+        title,
+        description,
+        scheduleDate,
+        notificationDetails,
+        androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+
+    );
+
   }
 
   static Future<void> cancelNotifications() async {

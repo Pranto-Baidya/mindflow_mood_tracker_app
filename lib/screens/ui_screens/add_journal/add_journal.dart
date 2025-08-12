@@ -153,6 +153,28 @@ class _AddJournalState extends State<AddJournal> {
     );
   }
 
+  void defaultTagDeletionAlert(BuildContext context){
+    showDialog(
+        context: context,
+        builder: (BuildContext context){
+          var theme = Theme.of(context);
+          return AlertDialog(
+            title: Text('Alert!',style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500),),
+            content: Text('Default tags can not be removed',style: theme.textTheme.titleMedium,),
+            actions: [
+              TextButton(
+                  onPressed: (){
+                    Navigator.pop(context);
+                  },
+                  child: Text('Ok',style: theme.textTheme.titleMedium?.copyWith(color: theme.colorScheme.primary),)
+              )
+            ],
+
+          );
+        }
+    );
+  }
+
   Widget _buildTags(String tag,BuildContext context){
     return Text(tag,style: Theme.of(context).textTheme.titleMedium);
   }
@@ -211,7 +233,8 @@ class _AddJournalState extends State<AddJournal> {
           backgroundColor: Colors.transparent,
           iconTheme: theme.iconTheme,
           systemOverlayStyle: SystemUiOverlayStyle(
-              statusBarBrightness: context.watch<ThemeProvider>().currentTheme==ThemeMode.dark? Brightness.light:Brightness.light
+              statusBarColor: Colors.transparent,
+              statusBarBrightness: context.watch<ThemeProvider>().currentTheme==ThemeMode.dark? Brightness.light:Brightness.dark
           ),
         ),
         body: Form(
@@ -310,6 +333,9 @@ class _AddJournalState extends State<AddJournal> {
                                       _tagToDelete = tag;
                                     });
                                   }
+                                  if(!isCustomTag){
+                                    defaultTagDeletionAlert(context);
+                                  }
                                 },
                                 child: ChoiceChip(
                                   label: Text(tag,
@@ -324,7 +350,7 @@ class _AddJournalState extends State<AddJournal> {
                                     setState(() {
                                       if (selected) {
                                         selectedTags.add(tag);
-                                      } else {
+                                      }else {
                                         selectedTags.remove(tag);
                                       }
                                     });
@@ -374,6 +400,11 @@ class _AddJournalState extends State<AddJournal> {
                 ElevatedButton(
                   onPressed: ()async{
                     if(_key.currentState!.validate()){
+
+                      if(selectedTags.isEmpty){
+                        ToastMsg.errorToast(AppLocalizations.of(context)!.please_select_at_least_one_tag);
+                        return;
+                      }
                       await submitJournal();
                       ToastMsg.successToast(AppLocalizations.of(context)!.journal_added_toast);
                       Navigator.pop(context);

@@ -448,4 +448,91 @@ class AppLocalizationsBn extends AppLocalizations {
 
   @override
   String get allow_notifications => 'বিজ্ঞপ্তির অনুমতি দিন';
+
+  @override
+  String get read_quotes_title => 'উদ্ধৃতি পড়ুন';
+
+  @override
+  String get get_a_quote_tab => 'একটি উদ্ধৃতি নিন';
+
+  @override
+  String get favorites_tab => 'পছন্দের তালিকা';
+
+  @override
+  String get generate_random_quote_button => 'একটি উদ্ধৃতি তৈরি করুন';
+
+  @override
+  String get view_saved_quotes_in_favorites => 'পছন্দের তালিকায় সংরক্ষিত উদ্ধৃতি দেখুন';
+
+  @override
+  String get generated_random_quote_text => 'উৎপন্ন এলোমেলো উদ্ধৃতি';
+
+  @override
+  String get author_label => 'লেখক: ';
+
+  @override
+  String get length_label => 'দৈর্ঘ্য: ';
+
+  @override
+  String get characters_label => 'অক্ষর';
+
+  @override
+  String get no_favorite_quotes_message => 'এখনো কোনো পছন্দের উদ্ধৃতি নেই।';
+
+  @override
+  String get favorite_quote_label => 'পছন্দের উদ্ধৃতি';
+
+  @override
+  String get removed_from_favorites_toast => 'পছন্দের তালিকা থেকে সরানো হয়েছে';
+
+  @override
+  String get added_to_favorites_toast => 'পছন্দের তালিকায় যোগ করা হয়েছে, অফলাইনে দেখার জন্য প্রস্তুত';
+
+  @override
+  String get motivate_yourself => 'নিজেকে অনুপ্রাণিত করুন';
+
+  @override
+  String get add_new_reminder_title => 'নতুন অনুস্মারক যোগ করুন';
+
+  @override
+  String get set_up_reminder_label => 'অনুস্মারক সেট আপ করুন';
+
+  @override
+  String get enter_reminder_id_hint => 'একটি অনন্য অনুস্মারক আইডি লিখুন';
+
+  @override
+  String get unique_id_warning => 'আইডি প্রতিটি অনুস্মারকের জন্য অনন্য হতে হবে, অন্যথায় বিদ্যমান অনুস্মারক ওভাররাইড হবে';
+
+  @override
+  String get write_title_hint => 'একটি শিরোনাম লিখুন';
+
+  @override
+  String get write_description_hint => 'একটি বিবরণ লিখুন';
+
+  @override
+  String get select_date_time_label => 'তারিখ এবং সময় নির্বাচন করুন: ';
+
+  @override
+  String get date_time_set_label => 'তারিখ এবং সময় নির্ধারিত হয়েছে: ';
+
+  @override
+  String get change_date_time_button => 'তারিখ এবং সময় পরিবর্তন করুন';
+
+  @override
+  String get set_reminder_button => 'অনুস্মারক সেট করুন';
+
+  @override
+  String get schedule_reminder_button => 'অনুস্মারক নির্ধারণ করুন';
+
+  @override
+  String get reminder_scheduled_toast => 'অনুস্মারক সফলভাবে নির্ধারিত হয়েছে';
+
+  @override
+  String get schedule_reminder => 'একটি অনুস্মারক নির্ধারণ করুন';
+
+  @override
+  String get reminder => 'অনুস্মারক';
+
+  @override
+  String get please_select_at_least_one_tag => 'কমপক্ষে একটি_ট্যাগ নির্বাচন করুন';
 }

@@ -448,4 +448,91 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get allow_notifications => 'Allow notifications';
+
+  @override
+  String get read_quotes_title => 'Read quotes';
+
+  @override
+  String get get_a_quote_tab => 'Get a quote';
+
+  @override
+  String get favorites_tab => 'Favorites';
+
+  @override
+  String get generate_random_quote_button => 'Generate a random quote';
+
+  @override
+  String get view_saved_quotes_in_favorites => 'View saved quotes in favorites';
+
+  @override
+  String get generated_random_quote_text => 'Generated random quote';
+
+  @override
+  String get author_label => 'Author : ';
+
+  @override
+  String get length_label => 'Length : ';
+
+  @override
+  String get characters_label => 'characters';
+
+  @override
+  String get no_favorite_quotes_message => 'No favorite quotes yet.';
+
+  @override
+  String get favorite_quote_label => 'Favorite quote';
+
+  @override
+  String get removed_from_favorites_toast => 'Removed from favorites';
+
+  @override
+  String get added_to_favorites_toast => 'Added to favorites, Ready to view offline';
+
+  @override
+  String get motivate_yourself => 'Motivate yourself';
+
+  @override
+  String get add_new_reminder_title => 'Add new reminder';
+
+  @override
+  String get set_up_reminder_label => 'Set up reminder';
+
+  @override
+  String get enter_reminder_id_hint => 'Enter an unique reminder id';
+
+  @override
+  String get unique_id_warning => 'Id must be unique for each reminder, otherwise existing reminder will be overridden';
+
+  @override
+  String get write_title_hint => 'Write a title';
+
+  @override
+  String get write_description_hint => 'Write a description';
+
+  @override
+  String get select_date_time_label => 'Select date and time: ';
+
+  @override
+  String get date_time_set_label => 'Date and time is set to: ';
+
+  @override
+  String get change_date_time_button => 'Change date and time';
+
+  @override
+  String get set_reminder_button => 'Set reminder';
+
+  @override
+  String get schedule_reminder_button => 'Schedule reminder';
+
+  @override
+  String get reminder_scheduled_toast => 'Reminder scheduled successfully';
+
+  @override
+  String get schedule_reminder => 'Schedule a reminder';
+
+  @override
+  String get reminder => 'Reminder';
+
+  @override
+  String get please_select_at_least_one_tag => 'Please select at least one tag';
 }

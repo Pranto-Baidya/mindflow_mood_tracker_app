@@ -185,7 +185,8 @@ class _EditJournalState extends State<EditJournal> {
         iconTheme: theme.iconTheme,
         backgroundColor: Colors.transparent,
         systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarBrightness: context.watch<ThemeProvider>().currentTheme==ThemeMode.dark? Brightness.light:Brightness.light
+            statusBarColor: Colors.transparent,
+            statusBarBrightness: context.watch<ThemeProvider>().currentTheme==ThemeMode.dark? Brightness.light:Brightness.dark
         ),
       ),
       body: Form(

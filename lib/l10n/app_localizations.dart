@@ -976,6 +976,180 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Allow notifications'**
   String get allow_notifications;
+
+  /// No description provided for @read_quotes_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Read quotes'**
+  String get read_quotes_title;
+
+  /// No description provided for @get_a_quote_tab.
+  ///
+  /// In en, this message translates to:
+  /// **'Get a quote'**
+  String get get_a_quote_tab;
+
+  /// No description provided for @favorites_tab.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites'**
+  String get favorites_tab;
+
+  /// No description provided for @generate_random_quote_button.
+  ///
+  /// In en, this message translates to:
+  /// **'Generate a random quote'**
+  String get generate_random_quote_button;
+
+  /// No description provided for @view_saved_quotes_in_favorites.
+  ///
+  /// In en, this message translates to:
+  /// **'View saved quotes in favorites'**
+  String get view_saved_quotes_in_favorites;
+
+  /// No description provided for @generated_random_quote_text.
+  ///
+  /// In en, this message translates to:
+  /// **'Generated random quote'**
+  String get generated_random_quote_text;
+
+  /// No description provided for @author_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Author : '**
+  String get author_label;
+
+  /// No description provided for @length_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Length : '**
+  String get length_label;
+
+  /// No description provided for @characters_label.
+  ///
+  /// In en, this message translates to:
+  /// **'characters'**
+  String get characters_label;
+
+  /// No description provided for @no_favorite_quotes_message.
+  ///
+  /// In en, this message translates to:
+  /// **'No favorite quotes yet.'**
+  String get no_favorite_quotes_message;
+
+  /// No description provided for @favorite_quote_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorite quote'**
+  String get favorite_quote_label;
+
+  /// No description provided for @removed_from_favorites_toast.
+  ///
+  /// In en, this message translates to:
+  /// **'Removed from favorites'**
+  String get removed_from_favorites_toast;
+
+  /// No description provided for @added_to_favorites_toast.
+  ///
+  /// In en, this message translates to:
+  /// **'Added to favorites, Ready to view offline'**
+  String get added_to_favorites_toast;
+
+  /// No description provided for @motivate_yourself.
+  ///
+  /// In en, this message translates to:
+  /// **'Motivate yourself'**
+  String get motivate_yourself;
+
+  /// No description provided for @add_new_reminder_title.
+  ///
+  /// In en, this message translates to:
+  /// **'Add new reminder'**
+  String get add_new_reminder_title;
+
+  /// No description provided for @set_up_reminder_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up reminder'**
+  String get set_up_reminder_label;
+
+  /// No description provided for @enter_reminder_id_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter an unique reminder id'**
+  String get enter_reminder_id_hint;
+
+  /// No description provided for @unique_id_warning.
+  ///
+  /// In en, this message translates to:
+  /// **'Id must be unique for each reminder, otherwise existing reminder will be overridden'**
+  String get unique_id_warning;
+
+  /// No description provided for @write_title_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a title'**
+  String get write_title_hint;
+
+  /// No description provided for @write_description_hint.
+  ///
+  /// In en, this message translates to:
+  /// **'Write a description'**
+  String get write_description_hint;
+
+  /// No description provided for @select_date_time_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Select date and time: '**
+  String get select_date_time_label;
+
+  /// No description provided for @date_time_set_label.
+  ///
+  /// In en, this message translates to:
+  /// **'Date and time is set to: '**
+  String get date_time_set_label;
+
+  /// No description provided for @change_date_time_button.
+  ///
+  /// In en, this message translates to:
+  /// **'Change date and time'**
+  String get change_date_time_button;
+
+  /// No description provided for @set_reminder_button.
+  ///
+  /// In en, this message translates to:
+  /// **'Set reminder'**
+  String get set_reminder_button;
+
+  /// No description provided for @schedule_reminder_button.
+  ///
+  /// In en, this message translates to:
+  /// **'Schedule reminder'**
+  String get schedule_reminder_button;
+
+  /// No description provided for @reminder_scheduled_toast.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder scheduled successfully'**
+  String get reminder_scheduled_toast;
+
+  /// No description provided for @schedule_reminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Schedule a reminder'**
+  String get schedule_reminder;
+
+  /// No description provided for @reminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder'**
+  String get reminder;
+
+  /// No description provided for @please_select_at_least_one_tag.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select at least one tag'**
+  String get please_select_at_least_one_tag;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

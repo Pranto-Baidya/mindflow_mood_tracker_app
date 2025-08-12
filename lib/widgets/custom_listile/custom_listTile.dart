@@ -7,13 +7,13 @@ class CustomListTile extends StatelessWidget {
   final IconData leadingIcon;
   final Color? iconColor;
   final VoidCallback onTap;
-  const CustomListTile({super.key, required this.title, required this.leadingIcon, this.iconColor, required this.onTap});
+  const CustomListTile({super.key, required this.title, required this.leadingIcon, this.iconColor,required this.onTap});
 
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return Padding(
-      padding:  EdgeInsets.symmetric(horizontal: 20.w),
+      padding: EdgeInsets.symmetric(horizontal: 20.w),
       child: Card(
         elevation: 0,
         color: theme.cardColor,

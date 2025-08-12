@@ -57,10 +57,9 @@ class _PasswordResetState extends State<PasswordReset> {
             child: Padding(
               padding:  EdgeInsets.symmetric(horizontal: 30.w),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 70.h,),
+                  SizedBox(height: 100.h,),
                   Text(AppLocalizations.of(context)!.forgot_password,style: theme.textTheme.displaySmall,),
                   SizedBox(height: 20.h,),
                   Text(AppLocalizations.of(context)!.reset_password_description,style: theme.textTheme.titleMedium,),
