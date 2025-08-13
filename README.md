@@ -2,8 +2,6 @@
 
 A new mood tracking app created using Flutter, Firebase, Provider, REST API & Sqflite
 
-# Project features
-
 # Core Features
 
 * Daily Mood Tracking
