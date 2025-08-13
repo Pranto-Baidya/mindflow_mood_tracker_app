@@ -4,10 +4,6 @@ A new mood tracking app created using Flutter, Firebase, Provider, REST API & Sq
 
 # Project features
 
-Here’s a full breakdown of your MindFlow – Mood Tracker & Reminder App features based on everything we’ve discussed and built so far:
-
----
-
 # Core Features
 
 * Daily Mood Tracking
