@@ -135,6 +135,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
                     width: 250.w,
                     height: 50.h,
                     child: TextFormField(
+                      keyboardType: TextInputType.number,
                       controller: _idController,
                       cursorColor: theme.colorScheme.primary,
                       decoration: InputDecoration(

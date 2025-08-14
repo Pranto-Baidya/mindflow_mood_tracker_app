@@ -667,7 +667,7 @@ class _ProfileState extends State<Profile> {
               child: GestureDetector(
                 onTap: ()async{
                   await context.read<AuthProvider>().signOut();
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>SignInSignUp()));
+                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>SignInSignUp()),(Route<dynamic>route)=>false,);
                 },
                 child: Card(
                   elevation: 0,

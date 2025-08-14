@@ -182,7 +182,7 @@ class BuildPage extends StatelessWidget {
         children: [
           Text(
             title,
-            style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w500,color: theme.colorScheme.primary),
+            style: theme.textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w500,color: theme.colorScheme.primary),
             textAlign: TextAlign.center,
           ),
           Image.asset(
