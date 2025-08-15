@@ -112,8 +112,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             controller: _controller,
             count: 5,
             effect: ExpandingDotsEffect(
-              dotColor:
-              darkMode ? const Color(0xFFF5F7FA) : const Color(0xFF333333),
+              dotColor: darkMode ? const Color(0xFFF5F7FA) : const Color(0xFF333333),
               activeDotColor: theme.colorScheme.primary,
               dotHeight: 10.h,
               dotWidth: 10.w,
