@@ -74,7 +74,7 @@ class NotificationService {
 
   static Future<void> setReminderNotification(
       { required int id,
-        required  String title,
+        required String title,
         required String description,
         required DateTime date,
         required TimeOfDay time

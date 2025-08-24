@@ -20,7 +20,7 @@ class CredentialsProvider extends ChangeNotifier{
   Future<void> loadCredentials()async{
     _rememberMe = await _storage.getRememberMe();
     if(_rememberMe){
-      _email = await _storage.getEmail() ?? '';
+      _email = await _storage.getEmail() ?? "";
       _password = await _storage.getPassword() ?? '';
     }
     notifyListeners();

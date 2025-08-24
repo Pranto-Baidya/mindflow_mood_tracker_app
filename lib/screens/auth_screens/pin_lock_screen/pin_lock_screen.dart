@@ -155,6 +155,7 @@ class _PinLockScreenState extends State<PinLockScreen> {
               ):SizedBox(),
               SizedBox(height: 50.h,),
               TextButton(
+
                   onPressed: ()async{
                     await auth.authenticateUser();
                     if(auth.isAuthenticated){

@@ -204,7 +204,11 @@ class _AddJournalState extends State<AddJournal> {
     return Column(
       children: [
         GestureDetector(
-          onTap: () => setState(() => selectedMood = mood),
+          onTap: (){
+            setState(() {
+              selectedMood = mood;
+            });
+          },
           child: CircleAvatar(
             radius: 25,
             backgroundColor:
